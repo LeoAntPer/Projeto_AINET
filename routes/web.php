@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Tshirt_imageController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +24,6 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::view('teste', 'template.layout');
+
+//Tshirt_images Routes
+Route::get('tshirt_images', [Tshirt_imageController::class, 'index']);
