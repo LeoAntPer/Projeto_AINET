@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tshirt_image;
+use App\Models\TshirtImage;
 use Illuminate\View\View;
 
-class Tshirt_imageController extends Controller
+class TshirtImageController extends Controller
 {
     public function index(): View
     {
-        $allTshirt_images = Tshirt_image::all();
+        $allTshirt_images = TshirtImage::all();
         return view('tshirt_images.index')->with('tshirt_images', $allTshirt_images);
     }
 }
