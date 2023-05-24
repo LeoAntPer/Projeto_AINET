@@ -26,11 +26,11 @@
     </tr>
     </thead>
     <tbody>
-    @foreach ($tshirtImages as $image)
+    @foreach ($tshirt_images as $image)
         <tr>
             <td>{{ $image->name }}</td>
             <td>{{ $image->description }}</td>
-            <td><img src="{{ $image->fullTshirt_imageUrl }}"  alt="Imagem"></td>
+            <td><img src="{{ $image->fullTshirt_imageUrl }}" style="width: 30px"  alt="Imagem"></td>
 
         </tr>
     @endforeach
