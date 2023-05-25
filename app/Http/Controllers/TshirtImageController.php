@@ -10,7 +10,8 @@ class TshirtImageController extends Controller
 {
     public function index(): View
     {
-        $allTshirt_images = TshirtImage::all();
-        return view('tshirt_images.index')->with('tshirt_images', $allTshirt_images);
+        $tshirtImages = TshirtImage::whereNull('customer_id')
+                                    ->get();
+        return view('tshirt_images.index')->with('tshirtImages', $tshirtImages);
     }
 }
