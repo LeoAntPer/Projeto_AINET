@@ -26,4 +26,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::view('teste', 'template.layout');
 
 //Tshirt_images Routes
-Route::get('tshirt_images', [TshirtImageController::class, 'index']);
+Route::resource('tshirt_images', TshirtImageController::class);
