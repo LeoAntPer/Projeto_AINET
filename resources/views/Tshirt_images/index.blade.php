@@ -1,7 +1,7 @@
 @extends('template.layout')
 @section('titulo', 'Catálogo')
 @section('main')
-<div style="display: flex; flex-direction: row; justify-content: space-between; flex-wrap: wrap">
+<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap">
     <div class="card">
         <a href="#"><img class="card-img-top img-fluid" src="/img/addImage.png" style="width: 200px; height: 200px; align-content: center" alt="Adicionar Imagem"></a>
         <div class="d-flex flex-column align-items-center p-1">
@@ -30,5 +30,8 @@
             </div>
         </div>
     @endforeach
+</div>
+<div>
+    {{ $tshirtImages->withQueryString()->links() }}
 </div>
 @endsection
