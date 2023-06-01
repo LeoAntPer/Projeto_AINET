@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Tshirts</title>
+    <title>@yield('titulo')</title>
     @vite('resources/sass/app.scss')
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -16,7 +16,7 @@
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand " href="{{ route('home') }}">
-        <img src="/img/plain_white.png" alt="Logo" class="bg-dark" width="96" height="52">
+        <img src="/img/plain_white.png" alt="Logo" class="bg-dark" width="80" height="52">
     </a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-3 me-lg-0" id="sidebarToggle" href="#"><i
@@ -79,7 +79,7 @@
                 <div class="nav">
                     <a class="nav-link" href="#">
                         <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
-                        Dashboard
+                        Catálogo
                     </a>
                 </div>
             </div>
