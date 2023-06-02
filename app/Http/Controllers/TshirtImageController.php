@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\TshirtImage;
 use Illuminate\View\View;
@@ -28,12 +27,23 @@ class TshirtImageController extends Controller
             //$tshirtImagesQuery->where('UPPER(description)','ILIKE','%'.strtoupper($filterByDescription).'%');
             $tshirtImagesQuery->where('description', 'LIKE', '%'.$filterByDescription.'%');
         }
-        $tshirtImages = $tshirtImagesQuery->get();
+        $tshirtImages = $tshirtImagesQuery->paginate(29);
         return view('tshirt_images.index', compact('categories',
             'filterByCategory',
             'filterByName',
             'filterByDescription',
             'tshirtImages'
         ));
+    }
+
+    public function show(int $imageId): View
+    {
+        $image = $this->getImageById($imageId);
+        return view('tshirt_images.show')->withImageId($imageId)->with('image', $image);
+    }
+
+    public function getImageById(int $imageId)
+    {
+        return TshirtImage::find($imageId);
     }
 }
