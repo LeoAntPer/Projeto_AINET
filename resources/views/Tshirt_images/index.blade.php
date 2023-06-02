@@ -6,19 +6,24 @@
             <div class="flex-grow-1 pe-2">
                 <div class="d-flex justify-content-between">
                     <div class="flex-grow-1 mb-3 form-floating">
-                        <select class="form-select" name="category" id="inputCategory">
-                            <option {{ old('category', $filterByCategory) === '' ? 'selected' : '' }} value="">Every category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                        <label for="inputCategory" class="form-label">Category</label>
+                        <input type="text" class="form-control" name="name" id="inputName" value="{{ old('name', $filterByName) }}">
+                        <label for="inputName" class="form-label">Name</label>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <div class="flex-grow-1 mb-3 form-floating">
-                        <input type="text" class="form-control" name="name" id="inputName" value="{{ old('name', $filterByName) }}">
-                        <label for="inputName" class="form-label">Name</label>
+                    <div class="flex-grow-1 mb-3 form-floating m-1">
+                        <input type="text" class="form-control" name="description" id="inputDescription" value="{{ old('name', $filterByDescription) }}">
+                        <label for="inputDescription" class="form-label">Description</label>
+                    </div>
+                    <div class="flex-grow-1 mb-3 form-floating m-1">
+                        <select class="form-select" name="category" id="inputCategory">
+                            <option {{ old('category', $filterByCategory) === '' ? 'selected' : '' }} value="">Every category</option>
+                            @foreach($categories as $category)
+                                <option {{ old('category', $filterByCategory) == $category->id ? 'selected' : '' }}
+                                        value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        <label for="inputCategory" class="form-label">Category</label>
                     </div>
                 </div>
             </div>

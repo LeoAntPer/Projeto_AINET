@@ -22,11 +22,11 @@ class TshirtImageController extends Controller
         }
         if ($filterByName !== '') {
             //$tshirtImagesQuery->where('UPPER(name)','ILIKE','%'.strtoupper($filterByName).'%');
-            $tshirtImagesQuery->whereRaw('UPPER(name) = (?)', strtoupper($filterByName));
+            $tshirtImagesQuery->where('name', 'LIKE', '%'.$filterByName.'%');
         }
         if ($filterByDescription !== '') {
             //$tshirtImagesQuery->where('UPPER(description)','ILIKE','%'.strtoupper($filterByDescription).'%');
-            $tshirtImagesQuery->whereRaw('UPPER(description)', strtoupper($filterByDescription));
+            $tshirtImagesQuery->where('description', 'LIKE', '%'.$filterByDescription.'%');
         }
         $tshirtImages = $tshirtImagesQuery->get();
         return view('tshirt_images.index', compact('categories',
