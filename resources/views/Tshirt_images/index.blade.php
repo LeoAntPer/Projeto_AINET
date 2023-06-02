@@ -1,7 +1,7 @@
 @extends('template.layout')
 @section('titulo', 'Catálogo')
 @section('main')
-    <form method="GET" action="{{ route('tshirt_images.index') }}">
+    <form method="GET" action="{{ route('tshirts_images.index') }}">
         <div class="d-flex justify-content-between">
             <div class="flex-grow-1 pe-2">
                 <div class="d-flex justify-content-between">
