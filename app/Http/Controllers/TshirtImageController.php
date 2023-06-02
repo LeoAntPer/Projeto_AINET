@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\TshirtImage;
 use Illuminate\View\View;
@@ -11,7 +11,7 @@ class TshirtImageController extends Controller
 {
     public function index(Request $request): View
     {
-        $categories = Categorie::all();
+        $categories = Category::all();
         $filterByCategory = $request->category ?? '';
         $filterByName = $request->name ?? '';
         $filterByDescription = $request->description ?? '';
