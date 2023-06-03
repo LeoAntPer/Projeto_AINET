@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\TshirtImageController;
-use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,8 +25,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::view('teste', 'template.layout');
 
-//tshirt_images Routes
-    Route::get('tshirt_images', [TshirtImageController::class, 'index']);
+//Tshirt_images Routes
+Route::get('tshirt_images', [TshirtImageController::class, 'index']);
 
 
 

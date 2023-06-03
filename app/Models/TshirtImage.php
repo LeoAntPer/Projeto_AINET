@@ -9,11 +9,17 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TshirtImage extends Model
 {
     use HasFactory;
-    protected $table = 'tshirt_images';
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
     protected function fullTshirtImageUrl(): Attribute
     {
         return Attribute::make(
