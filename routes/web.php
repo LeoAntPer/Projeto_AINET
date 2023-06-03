@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TshirtImageController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
