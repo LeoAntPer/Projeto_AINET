@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 class TshirtImage extends Model
 {
     use HasFactory;
+    protected $table = 'tshirt_images';
     protected function fullTshirtImageUrl(): Attribute
     {
         return Attribute::make(

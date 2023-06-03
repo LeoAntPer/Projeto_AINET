@@ -77,9 +77,15 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('tshirt_images.index') }}">
                         <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                         Catálogo
+                    </a>
+                </div>
+                <div class="nav">
+                    <a class="nav-link" href="{{ route('orders.index') }}">
+                        <div class="box"><i class="fas fa-home"></i></div>
+                        Orders
                     </a>
                 </div>
             </div>
