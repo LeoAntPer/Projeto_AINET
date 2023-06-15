@@ -29,7 +29,7 @@
             </div>
             <div class="flex-shrink-1 d-flex flex-column justify-content-between">
                 <button type="submit" class="btn btn-primary mb-3 px-4 flex-grow-1" name="filtrar">Filtrar</button>
-                <a href="#"
+                <a href="{{ route('tshirt_images.index') }}"
                    class="btn btn-secondary mb-3 py-3 px-4 flex-shrink-1">Limpar</a>
             </div>
         </div>
@@ -44,13 +44,13 @@
     </div>
     @foreach ($tshirtImages as $image)
         <div class="card" style="margin-bottom: 5px; margin-top: 5px; max-width: 200px">
-            <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id, 'color' => ($code = '00a2f2')]) }}">
+            <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id]) }}">
                 <img class="card-img-top img-fluid" src="{{ $image->fullTshirt_imageUrl }}" style="background-color: #2f2f2f; width: 200px; height: 200px; align-content: center" alt="Imagem">
             </a>
             <div class="d-flex flex-column align-items-center p-1">
                 <h5 class="card-title d-inline-block text-truncate" style="max-width: 200px; object-fit: fill">{{$image->name}}</h5>
                 <div class="d-flex flex-row">
-                    <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id, 'color' => ($code = '00a2f2')]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                    <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                     <a href="#" class="btn btn-dark"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="#">
                             @csrf

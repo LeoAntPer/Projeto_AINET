@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TshirtImageController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,13 @@ Route::view('teste', 'template.layout');
 Route::get('tshirt_images', [TshirtImageController::class, 'index']);
 
 
-
+// TODO: DELETE Route::get('tshirt_images/{tshirt_image}/{color}', [TshirtImageController::class, 'show'])->name('tshirt_images.show');
 Route::resource('tshirt_images', TshirtImageController::class);
 Route::resource('orders', OrderController::class);
+
+// Cart routes
+Route::post('cart/add', [CartController::class, 'addToCart'])->name('cart.add'); // add item to cart
+Route::delete('cart/{order_item}', [CartController::class, 'removeFromCart'])->name('cart.remove'); // remove item from cart
+Route::get('cart', [CartController::class, 'show'])->name('cart.show'); // show cart items
+Route::post('cart', [CartController::class, 'store'])->name('cart.store'); // confirm order
+Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy'); // clear cart

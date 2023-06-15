@@ -38,12 +38,13 @@ class TshirtImageController extends Controller
         ));
     }
 
-    public function show(int $imageId, string $colorCode): View
+    public function show(Request $request, int $imageID): View
     {
-        $image = TshirtImage::find($imageId);
+        $image = TshirtImage::find($imageID);
         $bases = Color::all();
+        $colorCode = $request->input('color') ?? '00a2f2';
         $basePreview = Color::where('code', $colorCode)->first();
-        return view('tshirt_images.show', compact('image','bases', 'basePreview'))->withImageId($imageId);
+        return view('tshirt_images.show', compact('image','bases', 'basePreview'))->withImageId($imageID);
     }
 
 
