@@ -2,11 +2,11 @@
     $disabledStr = $readonlyData ?? false ? 'disabled' : '';
 @endphp
 <div class="mb-3 form-floating">
-    <select name="status" id="inputStatus" {{ $disabledStr }} class="form-control @error('status') is-invalid @enderror">
-        <option {{ $order->status == old('status', $order->status) ? 'selected' : ''}}>pending</option>
-        <option {{ $order->status == old('status', $order->status) ? 'selected' : ''}}>paid</option>
-        <option {{ $order->status == old('status', $order->status) ? 'selected' : ''}}>closed</option>
-        <option {{ $order->status == old('status', $order->status) ? 'selected' : ''}}>canceled</option>
+    <select class="form-select @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
+        <option {{ $order->satus == "pending" ? 'selected' : ''}} >pending</option>
+        <option {{ $order->satus == "paid" ? 'selected' : ''}} >paid</option>
+        <option {{ $order->satus == "closed"? 'selected' : ''}} >closed</option>
+        <option {{ $order->satus == "canceled" ? 'selected' : ''}} >canceled</option>
     </select>
     <label for="inputStatus" class="form-label">Status</label>
     @error('status')
@@ -50,10 +50,10 @@
     @enderror
 </div>
 <div class="mb-3 form-floating">
-    <select name="payment_type" id="inputPaymentType" {{ $disabledStr }} class="form-control @error('payment_type') is-invalid @enderror">
-        <option {{ $order->payment_type == old('payment_type', $order->payment_type) ? 'selected' : ''}}>VISA</option>
-        <option {{ $order->payment_type == old('payment_type', $order->payment_type) ? 'selected' : ''}}>MC</option>
-        <option {{ $order->payment_type == old('payment_type', $order->payment_type) ? 'selected' : ''}}>PAYPAL</option>
+    <select name="payment_type" id="inputPaymentType" {{ $disabledStr }} class="form-select @error('payment_type') is-invalid @enderror">
+        <option {{ $order->payment_type == 'VISA' ? 'selected' : ''}}>VISA</option>
+        <option {{ $order->payment_type == 'MC' ? 'selected' : ''}}>MC</option>
+        <option {{ $order->payment_type == 'PAYPAL' ? 'selected' : ''}}>PAYPAL</option>
     </select>
     <label for="inputPaymentType" class="form-label">Payment type</label>
     @error('payment_type')

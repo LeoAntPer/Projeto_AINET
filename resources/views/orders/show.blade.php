@@ -9,4 +9,14 @@
     <div class="my-4 d-flex justify-content-end">
         <a href="{{ route('orders.edit', ['order' => $order]) }}" class="btn btn-secondary ms-3">Alterar Order</a>
     </div>
+    <div>
+        <h3>Order Items</h3>
+        @include('order_items.shared.table', [
+        'orderItems' => $order->orderItems,
+        'showOrder' => false,
+        'showDetail' => true,
+        'showEdit' => false,
+        'showDelete' => false,
+        ])
+    </div>
 @endsection

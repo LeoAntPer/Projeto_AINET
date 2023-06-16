@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 
+
 class OrderItemController extends Controller
 {
     public function index(): View
@@ -46,5 +47,6 @@ class OrderItemController extends Controller
     {
         return view('order_items.show')->withOrderItem($orderItem);
     }
+
 }
 

@@ -10,10 +10,43 @@ use Illuminate\Http\RedirectResponse;
 
 class OrderController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $allOrders = Order::paginate(10);
-        return view('orders.index')->with('orders', $allOrders);
+        $orders = Order::all();
+        $filterByStatus = $request->status ?? '';
+        $filterByPayment = $request->payment_type ?? '';
+        $filterByNif = $request->nif ?? '';
+        //$orderQuery = Order::query();
+        $orderQuery = Order::leftJoin('users', 'customer_id', '=', 'users.id');
+        if ($filterByStatus !== '') {
+            $orderQuery->where('status', $filterByStatus);
+        }
+        if ($filterByPayment !== '') {
+            $orderQuery->where('payment_type', $filterByPayment);
+        }
+        if ($filterByNif !== '') {
+            $orderQuery->where('nif', $filterByNif);
+        }
+        $orderQuery->select(
+            'orders.id',
+            'status',
+            'users.name as nome_customer',
+            'date',
+            'total_price',
+            'notes',
+            'nif',
+            'address',
+            'payment_type',
+            'payment_ref',
+            'receipt_url'
+        );
+        $orders = $orderQuery->paginate(10);
+        return view('orders.index', compact(
+            'orders',
+            'filterByStatus',
+            'filterByNif',
+            'filterByPayment'
+        ));
     }
 
     public function create(): View
