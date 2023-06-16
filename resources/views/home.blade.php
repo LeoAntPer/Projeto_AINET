@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('subtitulo')
+    <p>Teste</p>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -8,13 +12,14 @@
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
+                    @auth
+                        <p>{{ Auth::user()->name }}</p>
+                    @else
+                        <p>Bemvindo!</p>
+                        <p>Pode fazer o login
+                            <a href="{{ route('login') }}">aqui</a>
+                        </p>
+                    @endauth
                 </div>
             </div>
         </div>

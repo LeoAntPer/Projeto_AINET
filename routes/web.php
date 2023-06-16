@@ -16,19 +16,19 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
 
-Route::get('/', [TshirtImageController::class, 'index']);
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::get('/', [TshirtImageController::class, 'index'])->name('root');
+Route::get('/home', [TshirtImageController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::view('teste', 'template.layout');
+//Route::view('teste', 'template.layout');
 
 //Tshirt_images Routes
 Route::get('tshirt_images', [TshirtImageController::class, 'index']);
