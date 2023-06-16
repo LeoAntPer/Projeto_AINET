@@ -5,8 +5,9 @@
         @csrf
         @method('PUT')
         @include('orders.shared.fields')
-        <div>
-            <button type="submit" name="ok">Save new order</button>
+        <div class="my-4 d-flex justify-content-end">
+            <button type="submit" name="ok" class="btn btn-primary">Save new order</button>
+            <a href="{{ route('orders.edit', ['order' => $order]) }}" class="btn btn-secondary ms-3">Cancelar</a>
         </div>
     </form>
 @endsection
