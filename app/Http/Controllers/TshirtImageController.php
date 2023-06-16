@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
 use Illuminate\Http\Request;
 use App\Models\TshirtImage;
 use App\Models\Category;
@@ -37,14 +38,14 @@ class TshirtImageController extends Controller
         ));
     }
 
-    public function show(int $imageId): View
+    public function show(Request $request, int $imageID): View
     {
-        $image = $this->getImageById($imageId);
-        return view('tshirt_images.show')->withImageId($imageId)->with('image', $image);
+        $image = TshirtImage::find($imageID);
+        $bases = Color::all();
+        $colorCode = $request->input('color') ?? '00a2f2';
+        $basePreview = Color::where('code', $colorCode)->first();
+        return view('tshirt_images.show', compact('image','bases', 'basePreview'))->withImageId($imageID);
     }
 
-    public function getImageById(int $imageId)
-    {
-        return TshirtImage::find($imageId);
-    }
+
 }
