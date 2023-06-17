@@ -36,6 +36,7 @@
             'customers' => $customers,
             'showFoto' => true,
             'showDelete' => true,
+            'showEdit' => true
         ])
     <div>
         {{ $customers->withQueryString()->links() }}

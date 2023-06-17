@@ -56,7 +56,7 @@ class OrderController extends Controller
     public function store(OrderRequest $request): RedirectResponse
     {
         $newOrder = Order::create($request->validated());
-        $url = route('disciplinas.show', ['disciplina' => $newOrder]);
+        $url = route('orders.show', ['order' => $newOrder]);
         $htmlMessage = "Order <a href='$url'>#{$newOrder->id}</a>
             <strong>\"{$newOrder->nome}\"</strong> foi criada com sucesso!";
         return redirect('/orders')
@@ -91,7 +91,7 @@ class OrderController extends Controller
             $url = route('orders.show', ['order' => $order]);
             $htmlMessage = "Não foi possível apagar a order
             <a href='$url'>#{$order->id}</a>
-            <strong>\"{$order->nome}\"</strong> porque ocorreu um erro!";
+            <strong>\"{$order->id}\"</strong> porque ocorreu um erro!";
             $alertType = 'danger';
         }
         return redirect()->route('orders.index')
