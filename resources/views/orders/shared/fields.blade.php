@@ -3,10 +3,10 @@
 @endphp
 <div class="mb-3 form-floating">
     <select class="form-select @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
-        <option {{ $order->satus == "pending" ? 'selected' : ''}} >pending</option>
-        <option {{ $order->satus == "paid" ? 'selected' : ''}} >paid</option>
-        <option {{ $order->satus == "closed"? 'selected' : ''}} >closed</option>
-        <option {{ $order->satus == "canceled" ? 'selected' : ''}} >canceled</option>
+        <option {{ $order->status == "pending" ? 'selected' : ''}} >pending</option>
+        <option {{ $order->status == "paid" ? 'selected' : ''}} >paid</option>
+        <option {{ $order->status == "closed"? 'selected' : ''}} >closed</option>
+        <option {{ $order->status == "canceled" ? 'selected' : ''}} >canceled</option>
     </select>
     <label for="inputStatus" class="form-label">Status</label>
     @error('status')
@@ -26,7 +26,7 @@
 <div class="mb-3 form-floating">
     <input type="text" name="total_price" id="inputTotalPrice" {{ $disabledStr }} value="{{$order->total_price}}" class="form-control">
     <label for="inputTotalPrice" class="form-label">Total price</label>
-</div class="mb-3 form-floating">
+</div>
 <div class="mb-3 form-floating">
     <input type="text" name="notes" id="inputNotes" {{ $disabledStr }} value="{{$order->notes}}" class="form-control">
     <label for="inputNotes" class="form-label">Notes</label>
@@ -41,7 +41,7 @@
     @enderror
 </div>
 <div class="mb-3 form-floating">
-    <input type="text" name="nif" id="inputNif" {{ $disabledStr }} value="{{ old('nif', $order->nif) }}" class="form-control @error('nif') is-invalid @enderror">
+    <input type="text" name="nif" id="inputNIF" {{ $disabledStr }} value="{{ old('nif', $order->nif) }}" class="form-control @error('nif') is-invalid @enderror">
     <label for="inputNIF" class="form-label">NIF</label>
     @error('nif')
     <div class="invalid-feedback">

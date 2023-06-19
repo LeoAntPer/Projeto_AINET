@@ -2,7 +2,7 @@
 @section('titulo', 'Shopping cart')
 @section('subtitulo')
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Shopping cart</li>
+        <li class="breadcrumb-item active">Shopping cart</li>
     </ol>
 @endsection
 
@@ -26,11 +26,11 @@
         @foreach ($cart as $cartIndex => $orderItem)
             <tr>
                 <td><img class="card-img-top img-fluid" src="{{ $orderItem->tshirtImage->fullTshirtImageUrl }}" style="background-color: #2f2f2f; width: 40px; height: 40px; align-content: center" alt="Imagem"></td>
-                <td><div style="background-color: {{ '#'.$orderItem->color_code }}; width: 40px; height: 40px; border-radius: 5px"></div></td>
+                <td><div class="shadow-lg" style="background-color: {{ '#'.$orderItem->color_code }}; width: 40px; height: 40px; border-radius: 5px"></div></td>
                 <td>{{ $orderItem->size }}</td>
                 <td>{{ $orderItem->qty }}</td>
-                <td>{{ $orderItem->unit_price }}</td>
-                <td>{{ $orderItem->sub_total }}</td>
+                <td>{{ $orderItem->unit_price }} €</td>
+                <td>{{ $orderItem->sub_total }} €</td>
 
                 <td class="button-icon-col">
                     <form action="{{ route('cart.add') }}" method="POST">
@@ -61,5 +61,22 @@
         @endforeach
         </tbody>
     </table>
+    <!-- Footer da table -->
+    <div class="d-flex flex-row justify-content-between">
+        <div class="fw-bold">Total: {{ $cartTotal }} €</div>
+        <!-- Buttons -->
+        <div class="d-flex flex-row justify-content-between gap-2">
+            <div>
+                <a href="{{ route('cart.checkout') }}" class="btn btn-primary">Proceed to checkout</a>
+            </div>
+            <div>
+                <form action="{{ route('cart.destroy') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Clear cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
 <!--?php dump($cart) ?-->
 @endsection

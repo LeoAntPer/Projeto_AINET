@@ -22,11 +22,9 @@ class TshirtImageController extends Controller
             $tshirtImagesQuery->where('category_id', $filterByCategory);
         }
         if ($filterByName !== '') {
-            //$tshirtImagesQuery->where('UPPER(name)','ILIKE','%'.strtoupper($filterByName).'%');
             $tshirtImagesQuery->where('name', 'LIKE', '%'.$filterByName.'%');
         }
         if ($filterByDescription !== '') {
-            //$tshirtImagesQuery->where('UPPER(description)','ILIKE','%'.strtoupper($filterByDescription).'%');
             $tshirtImagesQuery->where('description', 'LIKE', '%'.$filterByDescription.'%');
         }
         $tshirtImages = $tshirtImagesQuery->paginate(29);

@@ -21,4 +21,9 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Order::class, 'order_id', 'id');
     }
+
+    public function tshirtImage(): BelongsTo
+    {
+        return $this->belongsTo(TshirtImage::class , 'tshirt_image_id', 'id');
+    }
 }

@@ -82,12 +82,16 @@
                         Catálogo
                     </a>
                     <a class="nav-link" href="{{route('orders.index')}}">
-                        <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
                         Orders
                     </a>
                     <a class="nav-link" href="{{route('customers.index')}}">
-                        <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                         Customers
+                    </a>
+                    <a class="nav-link" href="{{route('cart.show')}}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                        Shopping Cart
                     </a>
                 </div>
             </div>
@@ -102,8 +106,8 @@
                 @if ($errors->any())
                     @include('shared.alertValidation')
                 @endif
-                <!--<h1 class="mt-4">@yield('titulo', 'Politécnico de Leiria')</h1>
-                @yield('subtitulo')-->
+                <h1 class="mt-4">@yield('titulo', 'Politécnico de Leiria')</h1>
+                @yield('subtitulo')
                 <div class="mt-4">
                     @yield('main')
                 </div>
