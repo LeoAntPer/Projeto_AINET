@@ -17,14 +17,12 @@
     <tbody>
     @foreach ($customers as $customer)
         <tr>
-            @if ($showFoto)
-                <td><img src="/img/avatar_unknown.png" alt="Avatar" class="bg-dark rounded-circle" width="45" height="45"></td>
-            @endif
-            <td>{{ $customer->nome_user}}</td>
+
+
+            <td>{{ $customer->user->name}}</td>
             <td>{{ $customer->nif }}</td>
             @if ($showEdit)
-                <td class="button-icon-col"><a class="btn btn-dark"
-                                               href="{{ route('customers.edit', ['customer' => $customer]) }}">
+                <td class="button-icon-col"><a class="btn btn-dark" href="{{ route('customers.edit', ['customer' => $customer]) }}">
                         <i class="fas fa-edit"></i></a></td>
             @endif
             @if ($showDelete)

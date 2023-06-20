@@ -16,8 +16,7 @@ class OrderController extends Controller
         $filterByStatus = $request->status ?? '';
         $filterByPayment = $request->payment_type ?? '';
         $filterByNif = $request->nif ?? '';
-        //$orderQuery = Order::query();
-        $orderQuery = Order::leftJoin('users', 'customer_id', '=', 'users.id');
+        $orderQuery = Order::query();
         if ($filterByStatus !== '') {
             $orderQuery->where('status', $filterByStatus);
         }
@@ -27,19 +26,6 @@ class OrderController extends Controller
         if ($filterByNif !== '') {
             $orderQuery->where('nif', $filterByNif);
         }
-        $orderQuery->select(
-            'orders.id',
-            'status',
-            'users.name as nome_customer',
-            'date',
-            'total_price',
-            'notes',
-            'nif',
-            'address',
-            'payment_type',
-            'payment_ref',
-            'receipt_url'
-        );
         $orders = $orderQuery->paginate(10);
         return view('orders.index', compact(
             'orders',
@@ -73,7 +59,7 @@ class OrderController extends Controller
         $order->update($request->validated());
         $url = route('orders.show', ['order' => $order]);
         $htmlMessage = "Order <a href='$url'>#{$order->id}</a>
-            <strong>\"{$order->id}\"</strong> foi alterada com sucesso!";
+            <strong>\"{$order->user->name}\"</strong> foi alterada com sucesso!";
         return redirect()->route('orders.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
@@ -91,7 +77,7 @@ class OrderController extends Controller
             $url = route('orders.show', ['order' => $order]);
             $htmlMessage = "Não foi possível apagar a order
             <a href='$url'>#{$order->id}</a>
-            <strong>\"{$order->id}\"</strong> porque ocorreu um erro!";
+            <strong>\"{$order->user->name}\"</strong> porque ocorreu um erro!";
             $alertType = 'danger';
         }
         return redirect()->route('orders.index')
@@ -104,3 +90,4 @@ class OrderController extends Controller
         return view('orders.show')->withOrder($order);
     }
 }
+

@@ -15,7 +15,8 @@ class CustomerController extends Controller
     {
         $filterByNif = $request->nif ?? '';
         $filterByNome = $request->nome ?? '';
-        $customerQuery = Customer::leftJoin('users', 'customers.id', '=', 'users.id');
+        $customerQuery = Customer::query();
+        //$customerQuery = Customer::leftJoin('users', 'customers.id', '=', 'users.id');
         if ($filterByNif !== '') {
             $customerQuery->where('nif', $filterByNif);
         }
@@ -23,12 +24,12 @@ class CustomerController extends Controller
             $userIds = User::where('users.name', 'like', "%$filterByNome%")->pluck('users.id');
             $customerQuery->whereIntegerInRaw('customers.id', $userIds);
         }
-        $customerQuery->select(
+        /*$customerQuery->select(
             'users.id',
             'users.name as nome_user',
             'nif',
             'users.blocked as blocked'
-        );
+        );*/
         $customers = $customerQuery->paginate(10);
         return view('customers.index', compact(
             'customers',
@@ -61,7 +62,7 @@ class CustomerController extends Controller
         $customer->update($request->validated());
         $url = route('customers.show', ['customer' => $customer]);
         $htmlMessage = "Customer <a href='$url'>#{$customer->id}</a>
-            <strong>\"{$customer->id}\"</strong> foi alterado com sucesso!";
+            <strong>\"{$customer->user->name}\"</strong> foi alterado com sucesso!";
         return redirect()->route('customers.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
@@ -79,7 +80,7 @@ class CustomerController extends Controller
             $url = route('customers.show', ['customer' => $customer]);
             $htmlMessage = "Não foi possível apagar o customer
             <a href='$url'>#{$customer->id}</a>
-            <strong>\"{$customer->id}\"</strong> porque ocorreu um erro!";
+            <strong>\"{$customer->user->name}\"</strong> porque ocorreu um erro!";
             $alertType = 'danger';
         }
         return redirect()->route('customers.index')
@@ -92,3 +93,4 @@ class CustomerController extends Controller
         return view('customer.show')->withCustomer($customer);
     }
 }
+
