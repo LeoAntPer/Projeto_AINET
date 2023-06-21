@@ -34,7 +34,6 @@ Route::view('teste', 'template.layout');
 
 //Tshirt_images Routes
 Route::get('tshirt_images', [TshirtImageController::class, 'index']);
-//Route::get('/privateTshritImages/{imagename}', 'PrivateImageController@show')->name('pImages.show');
 
 
 Route::resource('tshirt_images', TshirtImageController::class);
