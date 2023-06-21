@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -30,9 +31,14 @@ class TshirtImage extends Model
     {
         return Attribute::make(
             get: function () {
-                return $this->image_url ? asset('storage/tshirt_images/' . $this->image_url) :
-                    asset('/img/avatar_unknown.png');
+                if($this->customer_id == null) {
+                    return $this->image_url ? asset('storage/tshirt_images/' . $this->image_url) :
+                        asset('/img/avatar_unknown.png');
+                }
+                return null;
             },
         );
     }
+
+
 }

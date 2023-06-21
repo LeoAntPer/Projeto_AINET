@@ -40,7 +40,7 @@
         </ul>
     @else
         <div class="ms-auto me-0 me-md-2 my-2 my-md-0 navbar-text">
-            {{ Auth::user()->name }}
+            {{ Auth::user()->name.' ('.Auth::user()->user_type.')' }}
         </div>
         <!-- Navbar-->
         <ul class="navbar-nav me-1 me-lg-3">
@@ -85,10 +85,12 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
                         Orders
                     </a>
+                    @if(Auth::user() != null and Auth::user()->user_type == 'A')
                     <a class="nav-link" href="{{route('customers.index')}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                         Customers
                     </a>
+                    @endif
                     <a class="nav-link" href="{{route('cart.show')}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
                         Shopping Cart

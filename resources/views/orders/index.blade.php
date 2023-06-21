@@ -7,7 +7,7 @@
         <li class="breadcrumb-item">Orders</li>
     </ol>
 @endsection
-
+{{ $user = Auth::user() }}
 @section('main')
     <hr>
     <form method="GET" action="{{ route('orders.index') }}">
@@ -72,32 +72,54 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($orders as $order)
-            <tr>
-                <td>{{ $order->status }}</td>
-                <td>{{ $order->user->name}}</td>
-                <td>{{ $order->date }}</td>
-                <td>{{ $order->total_price }}</td>
-                <td>{{ $order->address }}</td>
-                <td class="button-icon-col">
-                    <a href="{{ route('orders.show', ['order' => $order]) }}" class="btn btn-secondary">
-                        <i class="fas fa-eye"></i></a>
-                </td>
-                <td class="button-icon-col">
-                    <a href="{{ route('orders.edit', ['order' => $order]) }}" class="btn btn-dark">
-                        <i class="fas fa-edit"></i></a>
-                </td>
-                <td>
-                    <form method="POST" action="{{ route('orders.destroy', ['order' => $order]) }}" class="button-icon-col">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" name="delete" class="btn btn-danger">
-                            <i class="fas fa-trash"></i></button>
-                    </form>
-                </td>
+        @if($user != null)
+            @if($user->user_type = 'A' or $user->user_type = 'E')
+                @foreach ($orders as $order)
 
-            </tr>
-        @endforeach
+                    <tr>
+                        <td>{{ $order->status }}</td>
+                        <td>{{ $order->user->name}}</td>
+                        <td>{{ $order->date }}</td>
+                        <td>{{ $order->total_price }}</td>
+                        <td>{{ $order->address }}</td>
+                        <td class="button-icon-col">
+                            <a href="{{ route('orders.show', ['order' => $order]) }}" class="btn btn-secondary">
+                                <i class="fas fa-eye"></i></a>
+                        </td>
+                        <td class="button-icon-col">
+                            <a href="{{ route('orders.edit', ['order' => $order]) }}" class="btn btn-dark">
+                                <i class="fas fa-edit"></i></a>
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ route('orders.destroy', ['order' => $order]) }}" class="button-icon-col">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" name="delete" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i></button>
+                            </form>
+                        </td>
+
+                    </tr>
+                @endforeach
+            @elseif($user->user_type = 'C')
+                @foreach ($orders as $order)
+                    @if($order->customer_id = $user->id)
+
+                        <tr>
+                            <td>{{ $order->status }}</td>
+                            <td>{{ $order->user->name}}</td>
+                            <td>{{ $order->date }}</td>
+                            <td>{{ $order->total_price }}</td>
+                            <td>{{ $order->address }}</td>
+                            <td class="button-icon-col">
+                                <a href="{{ route('orders.show', ['order' => $order]) }}" class="btn btn-secondary">
+                                    <i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            @endif
+        @endif
         </tbody>
     </table>
     <div>

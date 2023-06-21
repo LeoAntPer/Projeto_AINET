@@ -6,6 +6,7 @@ use App\Models\Color;
 use Illuminate\Http\Request;
 use App\Models\TshirtImage;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TshirtImageController extends Controller
@@ -27,12 +28,19 @@ class TshirtImageController extends Controller
         if ($filterByDescription !== '') {
             $tshirtImagesQuery->where('description', 'LIKE', '%'.$filterByDescription.'%');
         }
+
+        $user = Auth::user();
+
+        $privateTshirtImages = TshirtImage::whereNotNull('customer_id')->get();
+
         $tshirtImages = $tshirtImagesQuery->paginate(29);
         return view('tshirt_images.index', compact('categories',
             'filterByCategory',
             'filterByName',
             'filterByDescription',
-            'tshirtImages'
+            'tshirtImages',
+            'privateTshirtImages',
+            'user'
         ));
     }
 

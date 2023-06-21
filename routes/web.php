@@ -24,7 +24,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [TshirtImageController::class, 'index'])->name('home');
 
 
 Route::get('/', [TshirtImageController::class, 'index'])->name('root');
@@ -34,7 +34,7 @@ Route::view('teste', 'template.layout');
 
 //Tshirt_images Routes
 Route::get('tshirt_images', [TshirtImageController::class, 'index']);
-
+//Route::get('/privateTshritImages/{imagename}', 'PrivateImageController@show')->name('pImages.show');
 
 
 Route::resource('tshirt_images', TshirtImageController::class);
