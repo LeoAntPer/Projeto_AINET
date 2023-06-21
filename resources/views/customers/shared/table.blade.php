@@ -17,8 +17,13 @@
     <tbody>
     @foreach ($customers as $customer)
         <tr>
-
-
+            @if ($showFoto)
+                <td width="45">
+                    @if ($customer->user->photo_url)
+                        <img src="{{ $customer->user->fullPhotoUrl }}" alt="Avatar" class="bg-dark rounded-circle" width="45" height="45">
+                    @endif
+                </td>
+            @endif
             <td>{{ $customer->user->name}}</td>
             <td>{{ $customer->nif }}</td>
             @if ($showEdit)

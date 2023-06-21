@@ -39,7 +39,13 @@ Route::get('tshirt_images', [TshirtImageController::class, 'index']);
 
 Route::resource('tshirt_images', TshirtImageController::class);
 Route::resource('orders', OrderController::class);
+
+
 Route::resource('customers', CustomerController::class);
+Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])
+    ->name('customers.foto.destroy');
+
+
 // Cart routes
 Route::post('cart/add', [CartController::class, 'addToCart'])->name('cart.add'); // add item to cart
 Route::delete('cart/{cartIndex}', [CartController::class, 'removeFromCart'])->name('cart.remove'); // remove item from cart

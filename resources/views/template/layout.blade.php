@@ -47,8 +47,8 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/img/avatar_unknown.png" alt="Avatar" class="bg-dark rounded-circle" width="45"
-                         height="45">
+                    <img src="{{ Auth::user()->fullPhotoUrl }}" alt="Avatar"
+                         class="bg-dark rounded-circle" width="45" height="45">
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

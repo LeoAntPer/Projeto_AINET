@@ -8,6 +8,9 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
 {
@@ -16,7 +19,6 @@ class CustomerController extends Controller
         $filterByNif = $request->nif ?? '';
         $filterByNome = $request->nome ?? '';
         $customerQuery = Customer::query();
-        //$customerQuery = Customer::leftJoin('users', 'customers.id', '=', 'users.id');
         if ($filterByNif !== '') {
             $customerQuery->where('nif', $filterByNif);
         }
@@ -24,12 +26,6 @@ class CustomerController extends Controller
             $userIds = User::where('users.name', 'like', "%$filterByNome%")->pluck('users.id');
             $customerQuery->whereIntegerInRaw('customers.id', $userIds);
         }
-        /*$customerQuery->select(
-            'users.id',
-            'users.name as nome_user',
-            'nif',
-            'users.blocked as blocked'
-        );*/
         $customers = $customerQuery->paginate(10);
         return view('customers.index', compact(
             'customers',
@@ -40,29 +36,74 @@ class CustomerController extends Controller
 
     public function create(): View
     {
-        return view('customers.create');
+        $customer = new Customer();
+        $user = new User();
+        $customer->user = $user;
+        return view('customers.create', compact('customer'));
     }
     public function store(CustomerRequest $request): RedirectResponse
     {
-        $newCustomer = Customer::create($request->validated());
-        $url = route('customers.show', ['customer' => $newCustomer]);
-        $htmlMessage = "Customer <a href='$url'>#{$newCustomer->id}</a>
-            <strong>\"{$newCustomer->id}\"</strong> foi criado com sucesso!";
-        return redirect('/customers')
+        $formData = $request->validated();
+        $customer = DB::transaction(function () use ($formData, $request) {
+            $newUser = new User();
+            $newUser->user_type = 'C';
+            $newUser->name = $formData['name'];
+            $newUser->email = $formData['email'];
+            $newUser->password = Hash::make($formData['password_inicial']);
+            $newUser->save();
+            $newCustomer = new Customer();
+            $newCustomer->id = $newUser->id;
+            $newCustomer->nif = $formData['nif'];
+            $newCustomer->address = $formData['address'];
+            $newCustomer->default_payment_type = $formData['default_payment_type'];
+            $newCustomer->save();
+            if ($request->hasFile('file_foto')) {
+                $path = $request->file_foto->store('public/photos/');
+                $newUser->photo_url = basename($path);
+                $newUser->save();
+            }
+            return $newCustomer;
+        });
+        $url = route('customers.show', ['customer' => $customer]);
+        $htmlMessage = "Customer <a href='$url'>#{$customer->id}</a>
+            <strong>\"{$customer->user->name}\"</strong>
+            foi criada com sucesso!";
+        return redirect()->route('customers.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
     }
 
     public function edit(Customer $customer): View
     {
-        return view('customers.edit')->withCustomer($customer);
+        return view('customers.edit', compact('customer'));
     }
     public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
-        $customer->update($request->validated());
+        $formData = $request->validated();
+        $customer = DB::transaction(function () use ($formData, $customer, $request) {
+            $customer->nif = $formData['nif'];
+            $customer->address = $formData['address'];
+            $customer->default_payment_type = $formData['default_payment_type'];
+            $customer->save();
+            $user = $customer->user;
+            $user->user_type = 'C';
+            $user->name = $formData['name'];
+            $user->email = $formData['email'];
+            $user->save();
+            if ($request->hasFile('file_foto')) {
+                if ($user->photo_url) {
+                    Storage::delete('public/photos/' . $user->photo_url);
+                }
+                $path = $request->file_foto->store('public/photos/');
+                $user->photo_url = basename($path);
+                $user->save();
+            }
+            return $customer;
+        });
         $url = route('customers.show', ['customer' => $customer]);
         $htmlMessage = "Customer <a href='$url'>#{$customer->id}</a>
-            <strong>\"{$customer->user->name}\"</strong> foi alterado com sucesso!";
+<strong>\"{$customer->user->name}\"</strong>
+foi alterado com sucesso!";
         return redirect()->route('customers.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
@@ -75,6 +116,10 @@ class CustomerController extends Controller
             $htmlMessage = "Customer #{$customer->id}
             <strong>\"{$customer->nome}\"</strong>
             foi apagado com sucesso!";
+            $user = $customer->user;
+            if ($user->photo_url) {
+                Storage::delete('public/photos/' . $user->photo_url);
+            }
             $alertType = 'success';
         } catch (\Exception $error) {
             $url = route('customers.show', ['customer' => $customer]);
@@ -90,7 +135,21 @@ class CustomerController extends Controller
 
     public function show(Customer $customer): View
     {
-        return view('customer.show')->withCustomer($customer);
+        return view('customers.show')->withCustomer($customer);
+    }
+
+    public function destroy_foto(Customer $customer): RedirectResponse
+    {
+        if ($customer->user->photo_url) {
+            Storage::delete('public/photos/' . $customer->user->photo_url);
+            $customer->user->photo_url = null;
+            $customer->user->save();
+        }
+        return redirect()->route('customers.edit', ['customer' => $customer])
+            ->with('alert-msg', 'Foto do customer "' . $customer->user->name .
+                '" foi removida!')
+            ->with('alert-type', 'success');
     }
 }
+
 
