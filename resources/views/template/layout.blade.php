@@ -52,8 +52,10 @@
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#">Perfil</a></li>
-                    <li><a class="dropdown-item" href="#">Alterar Senha</a></li>
+                    @if ((Auth::user()->user_type ?? '') == 'C')
+                        <li><a class="dropdown-item" href="{{ route('customers.show', ['customer' => Auth::user()->customer]) }}">Perfil</a></li>
+                    @endif
+                    <li><a class="dropdown-item" href="{{route('password.change.show')}}">Alterar Senha</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>

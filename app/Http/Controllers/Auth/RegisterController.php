@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -23,6 +25,12 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
 
     /**
      * Where to redirect users after registration.
@@ -53,6 +61,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'default_payment_type' => ['required', 'in:VISA,MC,PAYPAL'],
+            'nif' => ['required', 'string','digits:9'],
+            'address' => ['required', 'string'],
         ]);
     }
 
@@ -64,10 +75,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return DB::transaction(function () use ($data) {
+            $newUser = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'user_type' => 'C',
+            ]);
+            Customer::create([
+                'id' => $newUser->id,
+                'nif' => $data['nif'],
+                'address' => $data['address'],
+                'default_payment_type' => $data['default_payment_type']
+            ]);
+            return $newUser;
+        });
     }
 }

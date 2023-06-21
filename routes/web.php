@@ -6,7 +6,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Auth\ChangePasswordController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +22,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);Auth::routes();
+Route::get('/password/change', [ChangePasswordController::class, 'show'])
+    ->name('password.change.show');
+Route::post('/password/change', [ChangePasswordController::class, 'store'])
+    ->name('password.change.store');
 
 Route::get('/home', [TshirtImageController::class, 'index'])->name('home');
 

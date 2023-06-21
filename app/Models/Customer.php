@@ -12,7 +12,7 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nif', 'address', 'default_payment_type', 'default_payment_ref'];
+    protected $fillable = ['id','nif', 'address', 'default_payment_type', 'default_payment_ref'];
 
     public function orderRef(): HasMany
     {
@@ -29,4 +29,3 @@ class Customer extends Model
         return $this->belongsToMany(OrderItem::class, 'orders');
     }
 }
-
