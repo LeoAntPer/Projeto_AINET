@@ -20,6 +20,7 @@
             <th class="button-icon-col"></th>
             <th class="button-icon-col"></th>
             <th class="button-icon-col"></th>
+            <th class="button-icon-col"></th>
         </tr>
         </thead>
         <tbody>
@@ -50,6 +51,9 @@
                     </form>
                 </td>
                 <td>
+                    <a href="{{ route('cart.edit', ['cartIndex' => $cartIndex]) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                </td>
+                <td>
                     <form method="POST" action="{{ route('cart.remove', ['cartIndex' => $cartIndex]) }}" class="button-icon-col">
                         @csrf
                         @method('DELETE')
@@ -65,6 +69,7 @@
     <div class="d-flex flex-row justify-content-between">
         <div class="fw-bold">Total: {{ $cartTotal }} €</div>
         <!-- Buttons -->
+        @if(count($cart) > 0)
         <div class="d-flex flex-row justify-content-between gap-2">
             <div>
                 <a href="{{ route('cart.checkout') }}" class="btn btn-primary">Proceed to checkout</a>
@@ -77,6 +82,7 @@
                 </form>
             </div>
         </div>
+        @endif
     </div>
 <!--?php dump($cart) ?-->
 @endsection

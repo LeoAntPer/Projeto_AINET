@@ -24,17 +24,26 @@ class CartController extends Controller
     public function addToCart(Request $request): RedirectResponse
     {
         try {
-            $tshirt_image_id = $request->input('imageID');
-            $color_code = $request->input('color');
-            $size = $request->input('size');
+            $validated = $request->validate([
+                'imageID' => 'required|exists:tshirt_images,id',
+                'color' => 'required|exists:colors,code',
+                'size' => 'required|in:XS,S,M,L,XL',
+            ]);
+            $tshirt_image_id = $validated['imageID'];
+            $color_code = $validated['color'];
+            $size = $validated['size'];
             $cart = session('cart', []);
+
+            $htmlMessage = "New item added to <a href=".route('cart.show').">shopping cart</a>";
 
             // Se ja existe um order_item igual apenas queremos aumentar a quantidade
             $cartIndex = $this->isAlreadyInCart($tshirt_image_id, $color_code, $size);
             if($cartIndex != self::ITEM_NOT_IN_CART){
                 $cart[$cartIndex]->qty++;
                 $cart[$cartIndex]->sub_total += $cart[$cartIndex]->unit_price;
-                return back();
+                return back()
+                    ->with('alert-msg', $htmlMessage)
+                    ->with('alert-type', 'success');
             }
 
             // Create a temporary order_item (not in DB)
@@ -57,7 +66,9 @@ class CartController extends Controller
         } catch (\Exception $error) {
             // Dialog
         }
-        return back();
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
     }
 
     public function removeFromCart(Request $request, int $cartIndex): RedirectResponse
@@ -65,12 +76,16 @@ class CartController extends Controller
         $cart = session('cart', []);
         $orderItem = $cart[$cartIndex];
 
+        $htmlMessage = "Item removed from <a href=".route('cart.show').">shopping cart</a>";
+
         // verificar se e para remover completamente do carrinho ou apenas baixar quantidade
         $fullDelete = $request->input('fullDelete') ?? false;
         if($fullDelete and $orderItem->qty > 1){
             $orderItem->qty--;
             $orderItem->sub_total -= $orderItem->unit_price;
-            return back();
+            return back()
+                ->with('alert-msg', $htmlMessage)
+                ->with('alert-type', 'success');
         }
         // remover item do carrinho
         unset($cart[$cartIndex]);
@@ -79,7 +94,16 @@ class CartController extends Controller
             self::destroy($request);
         }
         $request->session()->put('cart', $cart);
-        return back();
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+    }
+
+    public function edit(Request $request, int $cartIndex): View
+    {
+        $cart = session('cart', []);
+        $orderItem = $cart[$cartIndex];
+        return view('cart.edit', compact('orderItem'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -106,10 +130,10 @@ class CartController extends Controller
 
     public function checkout(Request $request): View
     {
-        // TODO: authorization
         $cart = session('cart', []);
         $cartTotal = array_sum(array_column($cart, 'sub_total'));
         $order = new Order();
+        // TODO: authorization
         $customer = Customer::query()->where('id', '=', $request->user()->id)->first();
         $order->address = $customer->address;
         $order->payment_type = $customer->default_payment_type;

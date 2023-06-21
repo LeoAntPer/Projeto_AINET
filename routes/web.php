@@ -56,3 +56,5 @@ Route::get('cart', [CartController::class, 'show'])->name('cart.show'); // show 
 Route::post('cart', [CartController::class, 'store'])->name('cart.store'); // confirm order
 Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy'); // clear cart
 Route::get('cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout'); // clear cart
+Route::get('cart/edit/{cartIndex}', [CartController::class, 'edit'])->name('cart.edit'); // view para editar
+Route::put('cart/{cartIndex}', [CartController::class, 'update'])->name('cart.update'); // editar item
