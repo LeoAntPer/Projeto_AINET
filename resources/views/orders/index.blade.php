@@ -1,6 +1,5 @@
 @extends('template.layout')
 @section('titulo', 'Orders')
-
 @section('subtitulo')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Gestão</li>

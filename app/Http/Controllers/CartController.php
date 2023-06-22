@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Price;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -155,24 +156,74 @@ class CartController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // Validation
+        $validated = $request->validate([
+            'address' => 'required',
+            'nif' => 'required|string|max:9',
+            'payment_type' => 'required|in:VISA,MC,PAYPAL',
+            'payment_ref' => 'required',
+            'total_price' => 'required',
+            'notes' => 'sometimes'
+        ],
+        [
+            'nif.max' => 'Invalid nif',
+            'address.required' => 'This field is mandatory',
+            'nif.required' => 'This field is mandatory',
+            'payment_type.required' => 'This field is mandatory',
+            'payment_ref.required' => 'This field is mandatory',
+        ]);
+        $htmlMessage = '';
+        $alertType = '';
         try {
             $cart = session('cart', []);
+            $customer = Customer::query()->where('id', '=', $request->user()->id)->first();
+            $order = DB::transaction(function () use ($cart, $customer, $validated) {
+                // criar order
+                $newOrder = new Order();
+                $newOrder->status = 'pending';
+                $newOrder->customer_id = $customer->id;
+                $newOrder->date = Carbon::now()->toDateTimeString();
+                $newOrder->total_price = $validated['total_price'];
+                $newOrder->nif = $validated['nif'];
+                $newOrder->address = $validated['address'];
+                $newOrder->payment_type = $validated['payment_type'];
+                $newOrder->payment_ref = $validated['payment_ref'];
+                $notes = $validated['notes'];
+                if ($notes) {
+                    $newOrder->notes = $notes;
+                }
 
-            // Se o cart estiver vazio
-            if (count($cart) < 1) {
-                // Dialog
-                return back();
-            }
-//            DB::transaction(function () use ($aluno, $cart) {
-//                foreach ($cart as $disciplina) {
-//                    $aluno->disciplinas()->attach($disciplina->id, ['repetente' => 0]);
-//                }
-//            });
+                // guardar order na DB
+                $newOrder->save();
+                $orderID = $newOrder->id;
+
+                // guardar orderItems na DB
+                foreach ($cart as $orderItem) {
+                    $newOrderItem = new OrderItem();
+                    $newOrderItem->order_id = $orderID;
+                    $newOrderItem->tshirt_image_id = $orderItem->tshirt_image_id;
+                    $newOrderItem->color_code = $orderItem->color_code;
+                    $newOrderItem->size = $orderItem->size;
+                    $newOrderItem->qty = $orderItem->qty;
+                    $newOrderItem->unit_price = $orderItem->unit_price;
+                    $newOrderItem->sub_total = $orderItem->sub_total;
+                    $newOrderItem->save();
+                }
+                return $newOrder;
+            });
+            $htmlMessage = "Order created successfully. <a href=".route('orders.show', ['order' => $order->id]).">See order details</a>";
+            $alertType = 'success';
+            // clear ao cart
+            $this->destroy($request);
         }
         catch (\Exception $error) {
             // Dialog
+            $htmlMessage = 'Failed to complete order';
+            $alertType = 'danger';
         }
-        return back();
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', $alertType);
     }
 
     public function checkout(Request $request): View
