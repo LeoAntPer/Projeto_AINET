@@ -68,8 +68,9 @@
     <!-- Footer da table -->
     <div class="d-flex flex-row justify-content-between">
         <h4 class="fw-bold">Total: {{ $cartTotal }} €</h4>
-        <!-- Buttons -->
         @if(count($cart) > 0)
+        <!-- Buttons -->
+        @can('completeOrder')
         <div class="d-flex flex-row justify-content-between gap-2">
             <div>
                 <a href="{{ route('cart.checkout') }}" class="btn btn-primary">Proceed to checkout</a>
@@ -82,6 +83,9 @@
                 </form>
             </div>
         </div>
+        @elsecannot('completeOrder')
+        <p>To complete order you need to be registered</p>
+        @endcan
         @endif
     </div>
 <!--?php dump($cart) ?-->
