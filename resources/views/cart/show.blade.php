@@ -67,7 +67,7 @@
     </table>
     <!-- Footer da table -->
     <div class="d-flex flex-row justify-content-between">
-        <div class="fw-bold">Total: {{ $cartTotal }} €</div>
+        <h4 class="fw-bold">Total: {{ $cartTotal }} €</h4>
         <!-- Buttons -->
         @if(count($cart) > 0)
         <div class="d-flex flex-row justify-content-between gap-2">

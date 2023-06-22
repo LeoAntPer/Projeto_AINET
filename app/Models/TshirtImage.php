@@ -40,5 +40,17 @@ class TshirtImage extends Model
         );
     }
 
+    protected function fullTshirtImagePrivateUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if($this->customer_id != null) {
+                    return $this->image_url ? Storage::url('app/tshirt_images_private/'. $this->image_url) :
+                        asset('/img/avatar_unknown.png');
+                }
+                return null;
+            },
+        );
+    }
 
 }

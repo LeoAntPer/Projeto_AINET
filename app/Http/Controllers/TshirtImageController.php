@@ -53,5 +53,10 @@ class TshirtImageController extends Controller
         return view('tshirt_images.show', compact('image','bases', 'basePreview'))->withImageId($imageID);
     }
 
+//    public function test(Request $request): View
+//    {
+//        $img = TshirtImage::query()->where('id', '=', '279')->first();
+//        return view('tshirt_images.test', compact('img'));
+//    }
 
 }

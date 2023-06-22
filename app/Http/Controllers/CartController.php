@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -85,11 +86,11 @@ class CartController extends Controller
             $orderItem->sub_total -= $orderItem->unit_price;
             return back()
                 ->with('alert-msg', $htmlMessage)
-                ->with('alert-type', 'success');
+                ->with('alert-type', 'info');
         }
         // remover item do carrinho
         unset($cart[$cartIndex]);
-        // se o carrinho esta vazio, refresh
+        // se o carrinho esta vazio, refresh das variaveis de sessao
         if(count($cart) === 0){
             self::destroy($request);
         }
@@ -103,7 +104,53 @@ class CartController extends Controller
     {
         $cart = session('cart', []);
         $orderItem = $cart[$cartIndex];
-        return view('cart.edit', compact('orderItem'));
+        $colors = Color::all();
+        return view('cart.edit', compact('orderItem', 'colors', 'cartIndex'));
+    }
+
+    public function update(Request $request, int $cartIndex): RedirectResponse
+    {
+        // Validation
+        $validated = $request->validate([
+            'color' => 'required|exists:colors,code',
+            'quantity' => 'required|integer',
+            'size' => 'required|in:XS,S,M,L,XL',
+        ],
+        [
+            'quantity.integer' => 'Quantity needs to be a number',
+        ]);
+        $color = $validated['color'];
+        $quantity = intval($validated['quantity']);
+        $size = $validated['size'];
+
+        // Update
+        $htmlMessage = "Item successfully updated. View in <a href=".route('cart.show').">shopping cart</a>";
+        $cart = session('cart', []);
+        $orderItem = $cart[$cartIndex];
+
+        // if selected color, size and image already exists in cart => update qty and price
+        $sameOrderItemIndex = $this->isAlreadyInCart($orderItem->tshirt_image_id, $color, $size, ignoreIndex: $cartIndex);
+        if ($sameOrderItemIndex != self::ITEM_NOT_IN_CART) {
+            $sameOrderItem = $cart[$sameOrderItemIndex];
+            // atualizar valores
+            $orderItem->qty = $quantity;
+            $orderItem->qty += intval($sameOrderItem->qty);
+            $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
+            // remove duplicated item
+            unset($cart[$sameOrderItemIndex]);
+            $request->session()->put('cart', $cart);
+        }
+        else{
+            $orderItem->qty = $quantity;
+            $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
+        }
+        // normal update
+        $orderItem->color_code = $color;
+        $orderItem->size = $size;
+
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
     }
 
     public function store(Request $request): RedirectResponse
@@ -149,10 +196,15 @@ class CartController extends Controller
         return back();
     }
 
-    private function isAlreadyInCart($tshirt_image_id, $color_code, $size): int
+    private function isAlreadyInCart($tshirt_image_id, $color_code, $size, $ignoreIndex = null): int
     {
         $cart = session('cart', []);
         foreach ($cart as $id => $orderItem){
+            // pode ser preciso dar skip a si proprio
+            if ($ignoreIndex != null and $id == $ignoreIndex) {
+                continue;
+            }
+
             if (
                 $orderItem->tshirt_image_id == $tshirt_image_id and
                 $orderItem->color_code == $color_code and
