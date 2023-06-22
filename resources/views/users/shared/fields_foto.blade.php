@@ -17,4 +17,18 @@
             Apagar Foto
         </button>
     @endif
+    @if ($user->user_type == 'A')
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal"
+                data-action="{{ route('users.foto.destroy', ['user' => $user]) }}"
+                data-msgLine2="Quer realmente apagar a fotografia do administrador <strong>{{ $user->name }}</strong>?">
+            Apagar Foto
+        </button>
+    @endif
+    @if ($user->user_type == 'E')
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal"
+                data-action="{{ route('users.foto.destroy', ['user' => $user]) }}"
+                data-msgLine2="Quer realmente apagar a fotografia do funcionário <strong>{{ $user->name }}</strong>?">
+            Apagar Foto
+        </button>
+    @endif
 @endif

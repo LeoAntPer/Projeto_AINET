@@ -7,7 +7,7 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ChangePasswordController;
-
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -60,6 +60,9 @@ Route::resource('customers', CustomerController::class);
 Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])
     ->name('customers.foto.destroy');
 
+Route::resource('users', UserController::class);
+Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
+    ->name('users.foto.destroy');
 
 // Cart routes
 Route::post('cart/add', [CartController::class, 'addToCart'])->name('cart.add'); // add item to cart
