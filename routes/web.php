@@ -38,9 +38,6 @@ Route::view('teste', 'template.layout');
 
 //Tshirt_images Routes
 Route::get('tshirt_images', [TshirtImageController::class, 'index']);
-
-// Route::get('tshirt_images/test', [TshirtImageController::class, 'test']);
-
 // Route que devolve uma imagem privada
 Route::get('tshirt_images_private/{image}', function($image) {
     $file = storage_path('app/tshirt_images_private/'.$image);
