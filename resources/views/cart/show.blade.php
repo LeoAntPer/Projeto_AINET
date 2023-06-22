@@ -84,7 +84,7 @@
             </div>
         </div>
         @elsecannot('completeOrder')
-        <p>To complete order you need to be registered</p>
+        <p>To complete order you need to be registered as a customer</p>
         @endcan
         @endif
     </div>

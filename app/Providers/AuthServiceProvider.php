@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\Customer;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
@@ -23,8 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('completeOrder', function (?User $user) {
-            return $user;
+        Gate::define('completeOrder', function (User $user) {
+            return Customer::query()->where('id', '=', $user->id)->first();
         });
     }
 }
