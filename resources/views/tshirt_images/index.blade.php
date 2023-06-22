@@ -41,7 +41,7 @@
             @if($pImage->customer_id == $user->id)
             <div class="card" style="margin-bottom: 5px; margin-top: 5px; max-width: 200px">
                 <a href="{{ route('tshirt_images.show', ['tshirt_image' => $pImage->id]) }}">
-                    <img class="card-img-top img-fluid" src="{{ '/img/avatar_unknown.png') //TODO url das fotos privadas }}" style="background-color: #2f2f2f; width: 200px; height: 200px; align-content: center" alt="Imagem">
+                    <img class="card-img-top img-fluid" src="{{ route('tshirt_images.private', ['image'=> $pImage->image_url])}}" style="background-color: #2f2f2f; width: 200px; height: 200px; align-content: center" alt="Imagem">
                 </a>
                 <div class="d-flex flex-column align-items-center p-1">
                     <h5 class="card-title d-inline-block text-truncate" style="max-width: 200px; object-fit: fill">{{$pImage->name}}</h5>

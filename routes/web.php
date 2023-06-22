@@ -17,6 +17,12 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('tshirt_images_private/{image}', function($image) {
+    $file = storage_path('app/tshirt_images_private/'.$image);
+    return response()->file($file);
+})->name('tshirt_images.private');
+
+
 
 Route::get('/', function () {
     return view('welcome');
