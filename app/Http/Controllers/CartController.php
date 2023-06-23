@@ -94,7 +94,7 @@ class CartController extends Controller
         $request->session()->put('cart', $cart);
         return back()
             ->with('alert-msg', $htmlMessage)
-            ->with('alert-type', 'danger');
+            ->with('alert-type', 'success');
     }
 
     public function edit(Request $request, int $cartIndex): View
@@ -110,11 +110,12 @@ class CartController extends Controller
         // Validation
         $validated = $request->validate([
             'color' => 'required|exists:colors,code',
-            'quantity' => 'required|integer',
+            'quantity' => 'required|integer|gte:0',
             'size' => 'required|in:XS,S,M,L,XL',
         ],
         [
             'quantity.integer' => 'Quantity needs to be a number',
+            'quantity.gte' => 'Quantity needs to be a positive number',
         ]);
         $color = $validated['color'];
         $quantity = intval($validated['quantity']);
@@ -131,9 +132,6 @@ class CartController extends Controller
             $sameOrderItem = $cart[$sameOrderItemIndex];
             // atualizar valores
             $orderItem = $this->updateItemQuantityAndPrice($orderItem, $quantity + $sameOrderItem->qty);
-//            $orderItem->qty = $quantity;
-//            $orderItem->qty += intval($sameOrderItem->qty);
-//            $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
             // remove duplicated item
             unset($cart[$sameOrderItemIndex]);
             $request->session()->put('cart', $cart);
@@ -145,7 +143,7 @@ class CartController extends Controller
         $orderItem->color_code = $color;
         $orderItem->size = $size;
 
-        return back()
+        return redirect()->route('cart.show')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
     }
@@ -158,7 +156,7 @@ class CartController extends Controller
             'nif' => 'required|string|max:9',
             'payment_type' => 'required|in:VISA,MC,PAYPAL',
             'payment_ref' => 'required',
-            'total_price' => 'required',
+            'total_price' => 'required|numeric',
             'notes' => 'sometimes'
         ],
         [
@@ -239,7 +237,10 @@ class CartController extends Controller
     {
         $request->session()->forget('cart');
         $request->session()->forget('cart_id');
-        return back();
+        $htmlMessage = "Cart items removed";
+        return back()
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
     }
 
 
