@@ -70,11 +70,14 @@
         <h4 class="fw-bold">Total: {{ $cartTotal }} €</h4>
         @if(count($cart) > 0)
         <!-- Buttons -->
-        @can('completeOrder')
-        <div class="d-flex flex-row justify-content-between gap-2">
+        <div class="d-flex flex-row justify-content-between gap-4">
+            @can('completeOrder')
             <div>
                 <a href="{{ route('cart.checkout') }}" class="btn btn-primary">Proceed to checkout</a>
             </div>
+            @elsecannot('completeOrder')
+                <p class="fs-5 lh-lg">To complete order you need to be registered as a customer</p>
+            @endcan
             <div>
                 <form action="{{ route('cart.destroy') }}" method="POST">
                     @csrf
@@ -83,9 +86,6 @@
                 </form>
             </div>
         </div>
-        @elsecannot('completeOrder')
-        <p>To complete order you need to be registered as a customer</p>
-        @endcan
         @endif
     </div>
 <!--?php dump($cart) ?-->

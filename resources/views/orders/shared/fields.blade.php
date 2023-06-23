@@ -45,10 +45,12 @@
         @enderror
     </div>
 @endif
+@if ((Auth::user()->user_type ?? '') == 'A' or (Auth::user()->user_type ?? '') == 'E')
 <div class="mb-3 form-floating">
     <input type="text" name="customer_id" id="inputCustomer" {{ $disabledStr }} value="{{$order->customer_id}}" class="form-control">
     <label for="inputCustomer" class="form-label">Customer</label>
 </div>
+@endif
 <div class="mb-3 form-floating">
     <input type="text" name="date" id="inputDate" {{ $disabledStr }} value="{{$order->date}}" class="form-control">
     <label for="inputDate" class="form-label">Date</label>

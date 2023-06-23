@@ -36,7 +36,7 @@
     </form>
     @if($user != null and $user->user_type == 'C')
         <h1>My Images</h1>
-        <div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap">
+        <div class="d-flex flex-row justify-content-start flex-wrap gap-3">
         @foreach ($privateTshirtImages as $pImage)
             @if($pImage->customer_id == $user->id)
             <div class="card" style="margin-bottom: 5px; margin-top: 5px; max-width: 200px">
@@ -65,7 +65,7 @@
         </div>
     @endif
     <h1>Public Images</h1>
-<div style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap">
+<div class="d-flex flex-row justify-content-start flex-wrap gap-3">
     @if($user != null and $user->user_type == 'A')
     <div class="card">
         <a href="#"><img class="card-img-top img-fluid" src="/img/addImage.png" style="width: 200px; height: 200px; align-content: center" alt="Adicionar Imagem"></a>
@@ -76,13 +76,13 @@
     </div>
     @endif
     @foreach ($tshirtImages as $image)
-        <div class="card" style="margin-bottom: 5px; margin-top: 5px; max-width: 200px">
+        <div class="card" style="max-width: 200px">
             <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id]) }}">
                 <img class="card-img-top img-fluid" src="{{ $image->fullTshirt_imageUrl }}" style="background-color: #2f2f2f; width: 200px; height: 200px; align-content: center" alt="Imagem">
             </a>
             <div class="d-flex flex-column align-items-center p-1">
                 <h5 class="card-title d-inline-block text-truncate" style="max-width: 200px; object-fit: fill">{{$image->name}}</h5>
-                <div class="d-flex flex-row">
+                <div class="d-flex flex-row gap-1">
                     <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                     @if(Auth::user() != null and Auth::user()->user_type == 'A')
                     <a href="#" class="btn btn-dark"><i class="fas fa-edit"></i></a>

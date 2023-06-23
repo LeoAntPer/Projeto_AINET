@@ -50,6 +50,7 @@ class TshirtImageController extends Controller
         $bases = Color::all();
         $colorCode = $request->input('color') ?? '00a2f2';
         $basePreview = Color::where('code', $colorCode)->first();
-        return view('tshirt_images.show', compact('image','bases', 'basePreview'))->withImageId($imageID);
+        $size = $request->input('size') ?? 'M';
+        return view('tshirt_images.show', compact('image','bases', 'basePreview', 'size'))->withImageId($imageID);
     }
 }

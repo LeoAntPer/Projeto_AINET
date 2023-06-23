@@ -3,7 +3,7 @@
 @section('subtitulo')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Gestão</li>
-        <li class="breadcrumb-item">Orders</li>
+        <li class="breadcrumb-item active">Orders</li>
     </ol>
 @endsection
 {{ $user = Auth::user() }}
@@ -62,7 +62,7 @@
     <table class="table">
         <thead class="table-dark">
         <tr>
-            <th>Satus</th>
+            <th>Status</th>
             <th>Customer</th>
             <th>Date</th>
             <th>Total Price</th>

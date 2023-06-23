@@ -38,7 +38,7 @@
             <option {{ $orderItem->size == 'XL' ? 'selected' : ''}}>XL</option>
         </select>
         <label for="inputSize" class="form-label">Size</label>
-        @error('payment_type')
+        @error('size')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
