@@ -13,9 +13,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlockController;
 
-Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
-Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
-Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
+//Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
+//Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
+//Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -60,14 +60,6 @@ Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_
 
 
 Route::middleware('can:funcionario')->group(function () {
-
-    Route::get('tshirt_images_private/{image}', function ($image) {
-        $file = storage_path('app/tshirt_images_private/' . $image);
-        return response()->file($file);
-    })->name('tshirt_images.private');
-
-    //Tshirt_images Routes
-    Route::get('tshirt_images', [TshirtImageController::class, 'index']);
     // Route que devolve uma imagem privada
     Route::get('tshirt_images_private/{image}', function ($image) {
         $file = storage_path('app/tshirt_images_private/' . $image);
@@ -87,9 +79,9 @@ Route::middleware('can:funcionario')->group(function () {
     Route::middleware('can:administrate')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('colors', ColorController::class);
-//        Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
-//        Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
-//        Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
+        Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
+        Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
+        Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
     });
 
     // Cart routes

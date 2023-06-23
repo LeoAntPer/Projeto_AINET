@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->user_type == 'A';
         });
         Gate::define('funcionario', function (?User $user) {
-            return !($user->user_type ?? '' == 'E');
+            return $user->user_type ?? '' != 'E';
         });
     }
 }
