@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\TshirtImageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
@@ -11,6 +12,10 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlockController;
+
+Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
+Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
+Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +87,9 @@ Route::middleware('can:funcionario')->group(function () {
     Route::middleware('can:administrate')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('colors', ColorController::class);
+//        Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
+//        Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
+//        Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
     });
 
     // Cart routes

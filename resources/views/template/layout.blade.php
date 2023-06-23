@@ -104,14 +104,20 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
                         Shopping Cart
                     </a>
-                    <a class="nav-link" href="{{route('categories.index')}}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-tags"></i></div>
-                        Categories
-                    </a>
-                    <a class="nav-link" href="{{route('colors.index')}}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-droplet"></i></div>
-                        Colors
-                    </a>
+                    @can('administrate')
+                        <a class="nav-link" href="{{route('categories.index')}}">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-tags"></i></div>
+                            Categories
+                        </a>
+                        <a class="nav-link" href="{{route('colors.index')}}">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-droplet"></i></div>
+                            Colors
+                        </a>
+                        <a class="nav-link" href="{{route('prices.show')}}">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                            Prices
+                        </a>
+                    @endcan
                 </div>
             </div>
         </nav>
