@@ -76,6 +76,7 @@ class UserController extends Controller
         $user = DB::transaction(function () use ($formData, $user, $request) {
 
             $user->user_type = $formData['user_type'];
+            $user->blocked = $formData['blocked'];
             $user->name = $formData['name'];
             $user->email = $formData['email'];
             $user->save();

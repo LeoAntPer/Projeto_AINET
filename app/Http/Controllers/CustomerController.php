@@ -89,6 +89,7 @@ class CustomerController extends Controller
             $user->user_type = 'C';
             $user->name = $formData['name'];
             $user->email = $formData['email'];
+            $user->blocked = $formData['blocked'];
             $user->save();
             if ($request->hasFile('file_foto')) {
                 if ($user->photo_url) {

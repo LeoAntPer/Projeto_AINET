@@ -1,20 +1,50 @@
 @php
     $disabledStr = $readonlyData ?? false ? 'disabled' : '';
 @endphp
-<div class="mb-3 form-floating">
-    <select class="form-select @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
-        <option {{ $order->status == "pending" ? 'selected' : ''}} >pending</option>
-        <option {{ $order->status == "paid" ? 'selected' : ''}} >paid</option>
-        <option {{ $order->status == "closed"? 'selected' : ''}} >closed</option>
-        <option {{ $order->status == "canceled" ? 'selected' : ''}} >canceled</option>
-    </select>
-    <label for="inputStatus" class="form-label">Status</label>
-    @error('status')
-    <div class="invalid-feedback">
-        {{ $message }}
+@if ((Auth::user()->user_type ?? '') == 'E' && $order->status == 'pending' )
+    <div class="mb-3 form-floating">
+        <select class="form-select @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
+            <option {{ $order->status == 'pending' ? 'selected' : ''}}>pending</option>
+            <option {{ $order->status == 'paid' ? 'selected' : ''}}>paid</option>
+        </select>
+        <label for="inputStatus" class="form-label">Status</label>
+        @error('status')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
-    @enderror
-</div>
+@endif
+@if ((Auth::user()->user_type ?? '') == 'E' && $order->status == 'paid' )
+    <div class="mb-3 form-floating">
+        <select class="form-select @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
+            <option {{ $order->status == 'paid' ? 'selected' : ''}}>paid</option>
+            <option {{ $order->status == 'closed' ? 'selected' : ''}}>closed</option>
+        </select>
+        <label for="inputStatus" class="form-label">Status</label>
+        @error('status')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+@endif
+@if ((Auth::user()->user_type ?? '') == 'A')
+    <div class="mb-3 form-floating">
+        <select class="form-select @error('status') is-invalid @enderror" name="status" id="inputStatus" {{ $disabledStr }}>
+            <option {{ $order->status == 'pending' ? 'selected' : ''}}>pending</option>
+            <option {{ $order->status == 'paid' ? 'selected' : ''}}>paid</option>
+            <option {{ $order->status == 'closed'? 'selected' : ''}}>closed</option>
+            <option {{ $order->status == 'canceled' ? 'selected' : ''}}>canceled</option>
+        </select>
+        <label for="inputStatus" class="form-label">Status</label>
+        @error('status')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+@endif
 <div class="mb-3 form-floating">
     <input type="text" name="customer_id" id="inputCustomer" {{ $disabledStr }} value="{{$order->customer_id}}" class="form-control">
     <label for="inputCustomer" class="form-label">Customer</label>

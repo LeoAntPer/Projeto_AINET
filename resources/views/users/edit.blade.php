@@ -15,6 +15,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-start align-items-start">
             <div class="flex-grow-1 pe-2">
                 @include('users.shared.fields', ['user' => $user, 'readonlyData' => false])
+                @include('users.shared.blocked', ['user' => $user, 'readonlyData' => false])
                 @include('users.shared.user_type', ['user' => $user, 'readonlyData' => false])
                 <div class="my-1 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary" name="ok" form="form_user">Guardar

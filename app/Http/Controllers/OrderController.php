@@ -7,16 +7,25 @@ use App\Models\Order;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class OrderController extends Controller
 {
     public function index(Request $request): View
     {
-        $orders = Order::all();
+        $orderQuery = Order::query();
+        if(Auth::user()->user_type == 'C')
+        {
+            $orderQuery->where('customer_id', Auth::user()->id);
+        }
+        if(Auth::user()->user_type == 'E')
+        {
+            $orderQuery = Order::query()->whereIn('status', ['pending', 'paid']);
+        }
         $filterByStatus = $request->status ?? '';
         $filterByPayment = $request->payment_type ?? '';
         $filterByNif = $request->nif ?? '';
-        $orderQuery = Order::query();
         if ($filterByStatus !== '') {
             $orderQuery->where('status', $filterByStatus);
         }

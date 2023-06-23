@@ -55,10 +55,7 @@
                     @if ((Auth::user()->user_type ?? '') == 'C')
                         <li><a class="dropdown-item" href="{{ route('customers.show', ['customer' => Auth::user()->customer]) }}">Perfil</a></li>
                     @endif
-                        @if ((Auth::user()->user_type ?? '') == 'E')
-                            <li><a class="dropdown-item" href="{{ route('users.show', ['user' => Auth::user()]) }}">Perfil</a></li>
-                        @endif
-                        @if ((Auth::user()->user_type ?? '') == 'A')
+                    @if ((Auth::user()->user_type ?? '') == 'A')
                             <li><a class="dropdown-item" href="{{ route('users.show', ['user' => Auth::user()]) }}">Perfil</a></li>
                         @endif
                     <li><a class="dropdown-item" href="{{route('password.change.show')}}">Alterar Senha</a></li>
