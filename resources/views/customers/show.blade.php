@@ -4,7 +4,9 @@
 
 @section('subtitulo')
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">Customers</a></li>
+        @if ((Auth::user()->user_type ?? '') == 'A')
+            <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">Customers</a></li>
+        @endif
         <li class="breadcrumb-item"><strong>{{ $customer->user->name }}</strong></li>
         <li class="breadcrumb-item active">Consultar</li>
     </ol>
@@ -17,13 +19,6 @@
                 @include('users.shared.fields', ['user' => $customer->user, 'readonlyData' => true])
                 @include('customers.shared.fields', ['customer' => $customer, 'readonlyData' => true])
                 <div class="my-1 d-flex justify-content-end">
-                    <form method="POST" action="{{ route('customers.destroy', ['customer' => $customer]) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" name="delete" class="btn btn-danger">
-                            Apagar Customer
-                        </button>
-                    </form>
                     <a href="{{ route('customers.edit', ['customer' => $customer]) }}" class="btn btn-secondary ms-3">
                         Alterar Customer
                     </a>

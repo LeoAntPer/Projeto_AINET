@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BlockController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -55,16 +56,19 @@ Route::get('tshirt_images_private/{image}', function($image) {
 
 
 Route::resource('tshirt_images', TshirtImageController::class);
-Route::resource('orders', OrderController::class);
+Route::resource('orders', OrderController::class)->middleware('auth');
 
 
-Route::resource('customers', CustomerController::class);
+Route::resource('customers', CustomerController::class)->middleware('auth');
 Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])
-    ->name('customers.foto.destroy');
+    ->name('customers.foto.destroy')->middleware('auth');
 
-Route::resource('users', UserController::class);
-Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
-    ->name('users.foto.destroy');
+Route::middleware('admin')->group(function () {
+    Route::resource('users', UserController::class)->middleware('auth');
+    Route::resource('blockers', BlockController::class)->middleware('auth');
+    Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
+        ->name('users.foto.destroy')->middleware('auth');
+});
 
 // Gestao de categories, colors e prices (so administradores)
 Route::middleware('can:administrate')->group(function () {

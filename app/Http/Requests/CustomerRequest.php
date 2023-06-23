@@ -35,7 +35,6 @@ class CustomerRequest extends FormRequest
             'address' => 'required|string',
             'nif' => 'required|string|digits:9',
             'default_payment_type' => 'required|in:VISA,MC,PAYPAL',
-            'blocked' => 'sometimes|in:0,1',
             'file_foto' => 'sometimes|image|max:4096', // maxsize = 4Mb
             'password_inicial' => 'sometimes|required'
         ];
@@ -57,4 +56,3 @@ class CustomerRequest extends FormRequest
         ];
     }
 }
-

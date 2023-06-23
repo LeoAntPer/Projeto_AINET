@@ -16,6 +16,7 @@ class CustomerController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->authorize('administrate');
         $filterByNif = $request->nif ?? '';
         $filterByNome = $request->nome ?? '';
         $customerQuery = Customer::query();
@@ -89,7 +90,6 @@ class CustomerController extends Controller
             $user->user_type = 'C';
             $user->name = $formData['name'];
             $user->email = $formData['email'];
-            $user->blocked = $formData['blocked'];
             $user->save();
             if ($request->hasFile('file_foto')) {
                 if ($user->photo_url) {
@@ -105,13 +105,14 @@ class CustomerController extends Controller
         $htmlMessage = "Customer <a href='$url'>#{$customer->id}</a>
 <strong>\"{$customer->user->name}\"</strong>
 foi alterado com sucesso!";
-        return redirect()->route('customers.index')
+        return redirect()->route('customers.show', ['customer' => $customer])
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
     }
 
     public function destroy(Customer $customer): RedirectResponse
     {
+        $this->authorize('administrate');
         try {
             $customer->delete();
             $htmlMessage = "Customer #{$customer->id}
