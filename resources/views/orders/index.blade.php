@@ -37,18 +37,10 @@
                             <label for="inputNif" class="form-label">Nif</label>
                         </div>
                         <div class="mb-3 flex-grow-1 form-floating">
-                            <select class="form-select" name="payment_type" id="inputPayment">
-                                <option {{ old('payment_type', $filterByPayment) === '' ? 'selected' : '' }} value="">
-                                    Todos
-                                </option>
-                                <option {{ old('payment_type', $filterByPayment) == 'VISA' ? 'selected' : '' }} value='VISA'>VISA
-                                </option>
-                                <option {{ old('payment_type', $filterByPayment) == 'MC' ? 'selected' : '' }} value='MC'>MC
-                                </option>
-                                <option {{ old('payment_type', $filterByPayment) == 'PAYPAL' ? 'selected' : '' }} value='PAYPAL'>PAYPAL
-                                </option>
-                            </select>
-                            <label for="inputPayment" class="form-label">Payment type</label>
+                            <div class="mb-3 me-2 flex-grow-1 form-floating">
+                                <input type="date" class="form-control" name="date" id="inputDate" value="{{ old('name', $filterByDate) }}">
+                                <label for="inputDate" class="form-label">Date</label>
+                            </div>
                         </div>
                     </div>
                 </div>

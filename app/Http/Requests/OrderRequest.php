@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class OrderRequest extends FormRequest
 {
@@ -22,8 +23,15 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => [
+                'customer_id',
+                Rule::exists('users', 'id'),
+            ],
             'status' => 'required|in:pending,paid,closed,canceled',
-            'nif' => 'required|string|max:9',
+            'nif' => 'required|string|digits:9',
+            'date' => 'required|date',
+            'total_price' => 'required,numeric,regex:/^\d+(\.\d{1,2})?$/',
+            'notes' => 'optional|string',
             'address' => 'required|string',
             'payment_type' => 'required|in:VISA,MC,PAYPAL',
         ];

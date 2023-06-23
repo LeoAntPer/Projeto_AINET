@@ -24,13 +24,13 @@ class OrderController extends Controller
             $orderQuery = Order::query()->whereIn('status', ['pending', 'paid']);
         }
         $filterByStatus = $request->status ?? '';
-        $filterByPayment = $request->payment_type ?? '';
+        $filterByDate = $request->date ?? '';
         $filterByNif = $request->nif ?? '';
         if ($filterByStatus !== '') {
             $orderQuery->where('status', $filterByStatus);
         }
-        if ($filterByPayment !== '') {
-            $orderQuery->where('payment_type', $filterByPayment);
+        if ($filterByDate !== '') {
+            $orderQuery->where('date', $filterByDate);
         }
         if ($filterByNif !== '') {
             $orderQuery->where('nif', $filterByNif);
@@ -40,7 +40,7 @@ class OrderController extends Controller
             'orders',
             'filterByStatus',
             'filterByNif',
-            'filterByPayment'
+            'filterByDate'
         ));
     }
 
