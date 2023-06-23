@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\TshirtImageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
@@ -66,6 +67,7 @@ Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
     ->name('users.foto.destroy');
 
 Route::resource('categories', CategoryController::class);
+Route::resource('colors', ColorController::class);
 
 // Cart routes
 Route::post('cart/add', [CartController::class, 'addToCart'])->name('cart.add'); // add item to cart

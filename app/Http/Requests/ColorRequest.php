@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class ColorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'code' => 'required|size:6',
             'name' => 'required'
         ];
     }
@@ -29,7 +30,9 @@ class CategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'This field is mandatory'
+            'name.required' => 'This field is mandatory',
+            'code.required' => 'This field is mandatory',
+            'code.size' => 'Color code must be a hex code (6 characters)',
         ];
     }
 }

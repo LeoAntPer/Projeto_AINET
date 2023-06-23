@@ -75,6 +75,7 @@ class CategoryController extends Controller
     public function destroy(Category $category): RedirectResponse
     {
         try {
+            // TODO soft delete
             $category->delete();
             $htmlMessage = "Category #{$category->id}
             <strong>\"{$category->name}\"</strong>

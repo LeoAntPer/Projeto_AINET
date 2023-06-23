@@ -108,6 +108,10 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-tags"></i></div>
                         Categories
                     </a>
+                    <a class="nav-link" href="{{route('colors.index')}}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-droplet"></i></div>
+                        Colors
+                    </a>
                 </div>
             </div>
         </nav>

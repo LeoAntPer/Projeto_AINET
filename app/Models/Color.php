@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Color extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'code','name'
+    ];
+    public $timestamps = false;
+    protected $primaryKey = 'code';
+    public $incrementing = false;
 
     protected function fullTshirtBaseUrl(): Attribute
     {
