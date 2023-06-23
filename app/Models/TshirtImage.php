@@ -35,7 +35,8 @@ class TshirtImage extends Model
                     return $this->image_url ? asset('storage/tshirt_images/' . $this->image_url) :
                         asset('/img/avatar_unknown.png');
                 }
-                return null;
+                return $this->image_url ? route('tshirt_images.private', ['image' => $this->image_url]) :
+                    asset('/img/avatar_unknown.png');
             },
         );
     }

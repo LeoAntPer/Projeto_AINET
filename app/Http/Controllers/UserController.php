@@ -23,7 +23,7 @@ class UserController extends Controller
         }
         if ($filterByNome !== '') {
             $userIds = User::where('users.name', 'like', "%$filterByNome%")->pluck('users.id');
-            $userQuery->whereIntegerInRaw('customers.id', $userIds);
+            $userQuery->whereIntegerInRaw('users.id', $userIds);
         }
         $users = $userQuery->paginate(10);
         return view('users.index', compact(

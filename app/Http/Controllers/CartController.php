@@ -36,13 +36,14 @@ class CartController extends Controller
             $size = $validated['size'];
             $cart = session('cart', []);
 
+
             $htmlMessage = "New item added to <a href=".route('cart.show').">shopping cart</a>";
 
             // Se ja existe um order_item igual apenas queremos aumentar a quantidade
             $cartIndex = $this->isAlreadyInCart($tshirt_image_id, $color_code, $size);
             if($cartIndex != self::ITEM_NOT_IN_CART){
-                $cart[$cartIndex]->qty++;
-                $cart[$cartIndex]->sub_total += $cart[$cartIndex]->unit_price;
+                $orderItem = $cart[$cartIndex];
+                $orderItem = $this->updateItemQuantityAndPrice($orderItem, $orderItem->qty + 1);
                 return back()
                     ->with('alert-msg', $htmlMessage)
                     ->with('alert-type', 'success');
@@ -53,11 +54,7 @@ class CartController extends Controller
             $newOrderItem->tshirt_image_id = $tshirt_image_id;
             $newOrderItem->color_code = $color_code;
             $newOrderItem->size = $size;
-            $newOrderItem->qty = 1;
-            $prices = Price::query()->first();
-            $orderPrice = $newOrderItem->tshirtImage->customer_id == null ? $prices->unit_price_catalog : $prices->unit_price_own;
-            $newOrderItem->unit_price = $orderPrice;
-            $newOrderItem->sub_total = $newOrderItem->qty * $newOrderItem->unit_price;
+            $newOrderItem = $this->updateItemQuantityAndPrice($newOrderItem, 1);
             $cartId = session('cart_id', 0);
 
             // Add order_item to cart
@@ -83,11 +80,10 @@ class CartController extends Controller
         // verificar se e para remover completamente do carrinho ou apenas baixar quantidade
         $fullDelete = $request->input('fullDelete') ?? false;
         if($fullDelete and $orderItem->qty > 1){
-            $orderItem->qty--;
-            $orderItem->sub_total -= $orderItem->unit_price;
+            $orderItem = $this->updateItemQuantityAndPrice($orderItem, $orderItem->qty - 1);
             return back()
                 ->with('alert-msg', $htmlMessage)
-                ->with('alert-type', 'info');
+                ->with('alert-type', 'danger');
         }
         // remover item do carrinho
         unset($cart[$cartIndex]);
@@ -98,7 +94,7 @@ class CartController extends Controller
         $request->session()->put('cart', $cart);
         return back()
             ->with('alert-msg', $htmlMessage)
-            ->with('alert-type', 'success');
+            ->with('alert-type', 'danger');
     }
 
     public function edit(Request $request, int $cartIndex): View
@@ -134,16 +130,16 @@ class CartController extends Controller
         if ($sameOrderItemIndex != self::ITEM_NOT_IN_CART) {
             $sameOrderItem = $cart[$sameOrderItemIndex];
             // atualizar valores
-            $orderItem->qty = $quantity;
-            $orderItem->qty += intval($sameOrderItem->qty);
-            $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
+            $orderItem = $this->updateItemQuantityAndPrice($orderItem, $quantity + $sameOrderItem->qty);
+//            $orderItem->qty = $quantity;
+//            $orderItem->qty += intval($sameOrderItem->qty);
+//            $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
             // remove duplicated item
             unset($cart[$sameOrderItemIndex]);
             $request->session()->put('cart', $cart);
         }
         else{
-            $orderItem->qty = $quantity;
-            $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
+            $orderItem = $this->updateItemQuantityAndPrice($orderItem, $quantity);
         }
         // normal update
         $orderItem->color_code = $color;
@@ -231,7 +227,6 @@ class CartController extends Controller
         $cart = session('cart', []);
         $cartTotal = array_sum(array_column($cart, 'sub_total'));
         $order = new Order();
-        // TODO: authorization
         $customer = Customer::query()->where('id', '=', $request->user()->id)->first();
         $order->address = $customer->address;
         $order->payment_type = $customer->default_payment_type;
@@ -247,6 +242,8 @@ class CartController extends Controller
         return back();
     }
 
+
+    // Funcoes auxiliares
     private function isAlreadyInCart($tshirt_image_id, $color_code, $size, $ignoreIndex = null): int
     {
         $cart = session('cart', []);
@@ -266,5 +263,24 @@ class CartController extends Controller
             }
         }
         return -1;
+    }
+
+    private function getPrice ($isPrivate, $quantity): float
+    {
+        $prices = Price::query()->first();
+        // Desconto ?
+        if ($quantity >= $prices->qty_discount) {
+            return $isPrivate ? $prices->unit_price_own_discount : $prices->unit_price_catalog_discount;
+        }
+        // preco normal
+        return $isPrivate ? $prices->unit_price_own : $prices->unit_price_catalog;
+    }
+
+    private function updateItemQuantityAndPrice($orderItem, $quantity)
+    {
+        $orderItem->qty = $quantity;
+        $orderItem->unit_price = $this->getPrice($orderItem->tshirtImage->customer_id != null, $orderItem->qty);
+        $orderItem->sub_total = $orderItem->qty * $orderItem->unit_price;
+        return $orderItem;
     }
 }
