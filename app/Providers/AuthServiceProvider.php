@@ -27,5 +27,8 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('completeOrder', function (User $user) {
             return Customer::query()->where('id', '=', $user->id)->first();
         });
+        Gate::define('administrate', function (User $user) {
+            return $user->user_type == 'A';
+        });
     }
 }
