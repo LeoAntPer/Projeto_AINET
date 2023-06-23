@@ -104,6 +104,10 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
                         Shopping Cart
                     </a>
+                    <a class="nav-link" href="{{route('categories.index')}}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-tags"></i></div>
+                        Categories
+                    </a>
                 </div>
             </div>
         </nav>
