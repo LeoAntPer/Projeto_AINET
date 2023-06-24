@@ -82,10 +82,12 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
+                    @if(!Auth::user() || Auth::user()->user_type != 'E')
                     <a class="nav-link" href="{{route('tshirt_images.index')}}">
                         <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                         Catálogo
                     </a>
+                    @endif
                     <a class="nav-link" href="{{route('orders.index')}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
                         Orders
@@ -104,6 +106,7 @@
                             Statistics
                         </a>
                     @endif
+                        @if( !Auth::user() || Auth::user()->user_type != 'E')
                     <a class="nav-link" href="{{route('cart.show')}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
                         Shopping Cart
@@ -122,6 +125,7 @@
                             Prices
                         </a>
                     @endcan
+                        @endif
                 </div>
             </div>
         </nav>

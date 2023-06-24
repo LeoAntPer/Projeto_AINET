@@ -28,9 +28,7 @@ use App\Http\Controllers\StatisticsController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes(['verify' => true]);
 Auth::routes();
@@ -49,14 +47,20 @@ Route::resource('orders', OrderController::class)->middleware('auth');
 
 
 Route::middleware('can:funcionario')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
 
     Route::get('/home', [TshirtImageController::class, 'index'])->name('home');
 
     Route::get('/', [TshirtImageController::class, 'index'])->name('root');
 
+
     Route::resource('customers', CustomerController::class)->middleware('auth');
     Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])
         ->name('customers.foto.destroy')->middleware('auth');
+
 
     // Route que devolve uma imagem privada
     Route::get('tshirt_images_private/{image}', function ($image) {

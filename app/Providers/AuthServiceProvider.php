@@ -31,10 +31,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->user_type == 'A';
         });
         Gate::define('cienteNao', function (?User $user) {
-            return $user->user_type ?? '' != 'C';
+            return !$user || $user->user_type != 'C';
         });
         Gate::define('funcionario', function (?User $user) {
-            return $user->user_type ?? '' != 'E';
+            return !$user || $user->user_type != 'E';
         });
     }
 }
