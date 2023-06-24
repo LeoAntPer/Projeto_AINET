@@ -10,12 +10,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Response;
-use Dompdf\Options;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\View\Factory;
+use App\Notifications\OrderClosed;
+use App\Notifications\OrderCanceled;
+use App\Notifications\OrderPending;
+use App\Models\User;
+
 
 class OrderController extends Controller
 {
@@ -57,6 +61,8 @@ class OrderController extends Controller
     {
         $newOrder = Order::create($request->validated());
         $url = route('orders.show', ['order' => $newOrder]);
+        $user = User::find($newOrder->customer_id);
+        $user->notify(new OrderPending($newOrder));
         $htmlMessage = "Order <a href='$url'>#{$newOrder->id}</a>
             <strong>\"{$newOrder->nome}\"</strong> foi criada com sucesso!";
         return redirect('/orders')
@@ -92,6 +98,13 @@ class OrderController extends Controller
             $pdf->save($outputFilePath);
             // Store the path in a variable
             $order->receipt_url = $randomFilename;
+
+            $user = User::find($order->customer_id);
+            $user->notify(new OrderClosed($order));
+        }
+        if ($order->status == 'canceled') {
+            $user = User::find($order->customer_id);
+            $user->notify(new OrderCanceled($order));
         }
         $order->update($request->validated());
         $url = route('orders.show', ['order' => $order]);
@@ -136,4 +149,3 @@ class OrderController extends Controller
         return Response::download($pdfFilePath);
     }
 }
-
