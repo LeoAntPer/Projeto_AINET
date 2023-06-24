@@ -96,12 +96,12 @@
                             Customers
                         </a>
                         <a class="nav-link" href="{{route('users.index')}}">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                             Users
                         </a>
                         <a class="nav-link" href="{{route('statistics.index')}}">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
-                            Users
+                            <div class="sb-nav-link-icon"><i class="fas fa-solid fa-chart-bar"></i></div>
+                            Statistics
                         </a>
                     @endif
                     <a class="nav-link" href="{{route('cart.show')}}">
