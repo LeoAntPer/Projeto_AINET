@@ -11,6 +11,7 @@ use App\Models\TshirtImage;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class TshirtImageController extends Controller
@@ -76,14 +77,13 @@ class TshirtImageController extends Controller
             $newImage->created_at = date('Y-m-d H:i:s');
             if($request->hasFile('file_photo') and $request->file('file_photo')->isValid()){
                 $path = $request->file_photo->store('public/tshirt_images/');
-                $newImage->image_url = basename($path);
-                $newImage->save();
+                $newImage->image_url =basename($path);
             }
 
             if($user->user_type == 'C'){
                 $newImage->customer_id = $user->id;
             }
-
+            $newImage->save();
 
             return $newImage;
         });
@@ -91,6 +91,18 @@ class TshirtImageController extends Controller
         $htmlMessage = "Imagem <a href='$url'>#{$image->id}</a>
             <strong>\"{$image->name}\"</strong>
             foi criada com sucesso!";
+        return redirect()->route('tshirt_images.index')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+    }
+
+    public function destroy(int $imageId): RedirectResponse{
+        $image = TshirtImage::find($imageId);
+
+        Storage::delete('public/tshirt_images/'.$image->image_url);
+        $image->delete();
+
+        $htmlMessage='Imagem'.$image->name.' Apagada';
         return redirect()->route('tshirt_images.index')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', 'success');
