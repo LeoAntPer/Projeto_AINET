@@ -29,7 +29,6 @@ use App\Http\Controllers\StatisticsController;
 */
 
 
-
 Auth::routes(['verify' => true]);
 Auth::routes();
 Route::get('/password/change', [ChangePasswordController::class, 'show'])
@@ -98,4 +97,5 @@ Route::middleware('can:funcionario')->group(function () {
 
     Route::get('/download-pdf/{order}', [OrderController::class, 'downloadPDF'])->name('download.pdf')->middleware('auth');
 });
+
 
