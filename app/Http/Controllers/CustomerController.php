@@ -137,6 +137,7 @@ foi alterado com sucesso!";
 
     public function show(Customer $customer): View
     {
+        $this->authorize('cliente');
         return view('customers.show')->withCustomer($customer);
     }
 

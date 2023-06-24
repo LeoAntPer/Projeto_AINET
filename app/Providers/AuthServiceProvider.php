@@ -30,6 +30,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('administrate', function (User $user) {
             return $user->user_type == 'A';
         });
+        Gate::define('ciente', function (?User $user) {
+            return !$user || $user->user_type == 'C';
+        });
         Gate::define('cienteNao', function (?User $user) {
             return !$user || $user->user_type != 'C';
         });
