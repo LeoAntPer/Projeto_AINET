@@ -82,7 +82,7 @@
                 <div class="d-flex flex-row gap-1">
                     <a href="{{ route('tshirt_images.show', ['tshirt_image' => $image->id]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                     @if(Auth::user() != null and Auth::user()->user_type == 'A')
-                    <a href="#" class="btn btn-dark"><i class="fas fa-edit"></i></a>
+                    <a href="{{ route('tshirt_images.edit', ['tshirt_image'=>$image->id]) }}" class="btn btn-dark"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{ route('tshirt_images.destroy', ['tshirt_image' => $image->id]) }}">
                             @csrf
                             @method('DELETE')

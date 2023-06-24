@@ -59,6 +59,33 @@ class TshirtImageController extends Controller
         return view('tshirt_images.show', compact('image','bases', 'basePreview', 'size'))->withImageId($imageID);
     }
 
+    public function edit(Request $request, int $imageID): View
+    {
+        $image = TshirtImage::find($imageID);
+        $categories = Category::all();
+        return view('tshirt_images.edit', compact('image','categories'));
+    }
+
+    public function update(TshirtImageRequest $request, int $imageID): RedirectResponse
+    {
+        $formData = $request->validated();
+        $image = DB::transaction(function () use ($formData, $request, $imageID) {
+            $updatedImage = TshirtImage::find($imageID);
+            $updatedImage->name = $formData['name'];
+            $updatedImage->description = $formData['description'];
+            $updatedImage->category_id = $request->input('category');
+            $updatedImage->save();
+        });
+
+        $url = route('tshirt_images.show', ['tshirt_image' => $image->id]);
+        $htmlMessage = "Imagem <a href='$url'>#{$image->id}</a>
+            <strong>\"{$image->name}\"</strong>
+            foi atualizada com sucesso!";
+        return redirect()->route('tshirt_images.index')
+            ->with('alert-msg', $htmlMessage)
+            ->with('alert-type', 'success');
+    }
+
     public function create() {
         $image = new TshirtImage();
         $filterByCategory = '';
@@ -71,7 +98,7 @@ class TshirtImageController extends Controller
         $formData = $request->validated();
         $image = DB::transaction(function () use ($formData, $request, $user) {
             $newImage = new TshirtImage();
-            //$newImage->category_id = $formData['category'];
+            $newImage->category_id = $request->input('category');
             $newImage->name = $formData['name'];
             $newImage->description = $formData['description'];
             $newImage->created_at = date('Y-m-d H:i:s');
