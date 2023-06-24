@@ -13,9 +13,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\StatisticsController;
-//Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
-//Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
-//Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +35,6 @@ Route::post('/password/change', [ChangePasswordController::class, 'store'])
 
 
 Route::view('teste', 'template.layout');
-//Route::view('teste', 'template.layout');
-
 
 
 Route::resource('orders', OrderController::class)->middleware('auth');

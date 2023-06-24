@@ -29,7 +29,7 @@ class StatisticsController extends Controller
         $totalOrdersItemsL = OrderItem::query()->where('size', 'L')->count('id');
         $totalOrdersItemsXl = OrderItem::query()->where('size', 'XL')->count('id');
         $totalTshirtImages = TshirtImage::count('id');
-        $totalTshirtImagesPublic = TshirtImage::query()->where('customer_id', 'null')->count('id');
+        $totalTshirtImagesPublic = TshirtImage::query()->whereNull('customer_id')->count('id');
         $totalTshirtImagesPrivate = $totalTshirtImages - $totalTshirtImagesPublic;
         $totalCategory = Category::count('id');
         $categories = Category::all();

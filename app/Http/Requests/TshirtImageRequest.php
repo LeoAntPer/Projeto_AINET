@@ -11,7 +11,8 @@ class TshirtImageRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => 'required',
-            'file_photo' => 'required|image|max:4096'
+            'file_photo' => 'required|image|max:4096',
+            'category' => 'required|exists:categories,id',
         ];
     }
 

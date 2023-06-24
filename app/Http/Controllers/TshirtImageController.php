@@ -69,11 +69,11 @@ class TshirtImageController extends Controller
     public function update(TshirtImageRequest $request, int $imageID): RedirectResponse
     {
         $formData = $request->validated();
-        $image = DB::transaction(function () use ($formData, $request, $imageID) {
+        $image = DB::transaction(function () use ($formData, $imageID) {
             $updatedImage = TshirtImage::find($imageID);
             $updatedImage->name = $formData['name'];
             $updatedImage->description = $formData['description'];
-            $updatedImage->category_id = $request->input('category');
+            $updatedImage->category_id = $formData['category'];
             $updatedImage->save();
         });
 
@@ -93,17 +93,19 @@ class TshirtImageController extends Controller
         return view('tshirt_images.create', compact('image', 'filterByCategory', 'categories'));
     }
 
-    public function store(TshirtImageRequest $request, User $user): RedirectResponse
+    public function store(TshirtImageRequest $request): RedirectResponse
     {
+        $user = $request->user();
         $formData = $request->validated();
         $image = DB::transaction(function () use ($formData, $request, $user) {
             $newImage = new TshirtImage();
-            $newImage->category_id = $request->input('category');
+            $newImage->category_id = $formData['category'];
             $newImage->name = $formData['name'];
             $newImage->description = $formData['description'];
             $newImage->created_at = date('Y-m-d H:i:s');
             if($request->hasFile('file_photo') and $request->file('file_photo')->isValid()){
-                $path = $request->file_photo->store('public/tshirt_images/');
+                $folder = $user->user_type == 'C' ? 'tshirt_images_private' : 'public/tshirt_images/';
+                $path = $request->file_photo->store($folder);
                 $newImage->image_url =basename($path);
             }
 

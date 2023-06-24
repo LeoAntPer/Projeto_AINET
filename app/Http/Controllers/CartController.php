@@ -85,7 +85,7 @@ class CartController extends Controller
             $orderItem = $this->updateItemQuantityAndPrice($orderItem, $orderItem->qty - 1);
             return back()
                 ->with('alert-msg', $htmlMessage)
-                ->with('alert-type', 'danger');
+                ->with('alert-type', 'success');
         }
         // remover item do carrinho
         unset($cart[$cartIndex]);
