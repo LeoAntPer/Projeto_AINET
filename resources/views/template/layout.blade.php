@@ -40,7 +40,7 @@
         </ul>
     @else
         <div class="ms-auto me-0 me-md-2 my-2 my-md-0 navbar-text">
-            {{ Auth::user()->name.' ('.Auth::user()->user_type.')' }}
+            {{ Auth::user()->name}}
         </div>
         <!-- Navbar-->
         <ul class="navbar-nav me-1 me-lg-3">

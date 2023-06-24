@@ -31,8 +31,9 @@ table th.button-icon-col, table td.button-icon-col {
 }
 
 textarea.form-control{
-    resize: none !important;
+    resize: vertical !important;
     height: 3.625rem !important;
+
 }
 
 textarea.form-control.height-xs {

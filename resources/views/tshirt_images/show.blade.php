@@ -10,8 +10,7 @@
         <div>
             <img src="{{ $image->fullTshirtImageUrl }}" class="card-img-top img-fluid"  style="background-color: #2f2f2f; width: 300px; height: 300px; align-content: center" alt="Imagem">
             <div class="m-1">
-                <h3 class="card-title" style="max-width: 300px; object-fit: fill">{{$image->name}}</h3>
-                <p class="d-inline-block text-wrap" style="max-width: 300px">{{$image->description}}</p>
+                @include('tshirt_images.shared.fields', ['readonlyData' => true])
             </div>
         </div>
         <div class="card-img-top img-fluid d-flex justify-content-center" style="width: 400px; height: 400px; position: relative">
