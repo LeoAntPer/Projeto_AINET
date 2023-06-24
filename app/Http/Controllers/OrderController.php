@@ -79,6 +79,7 @@ class OrderController extends Controller
     public function update(OrderRequest $request, Order $order): RedirectResponse
     {
         $this->authorize('cienteNao');
+        $order->update($request->validated());
         if ($order->status == 'closed') {
             $pdf = new PDF(
                 $options = new Dompdf(),
@@ -103,12 +104,13 @@ class OrderController extends Controller
 
             $user = User::find($order->customer_id);
             $user->notify(new OrderClosed($order));
+            $order->update($request->validated());
         }
         if ($order->status == 'canceled') {
             $user = User::find($order->customer_id);
             $user->notify(new OrderCanceled($order));
+            $order->update($request->validated());
         }
-        $order->update($request->validated());
         $url = route('orders.show', ['order' => $order]);
         $htmlMessage = "Order <a href='$url'>#{$order->id}</a>
             <strong>\"{$order->user->name}\"</strong> foi alterada com sucesso!";

@@ -13,7 +13,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\StatisticsController;
-
 //Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
 //Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
 //Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
@@ -41,28 +40,24 @@ Route::post('/password/change', [ChangePasswordController::class, 'store'])
     ->name('password.change.store');
 
 
-
-
-Route::get('/home', [TshirtImageController::class, 'index'])->name('home');
-
-Route::get('/', [TshirtImageController::class, 'index'])->name('root');
-
 Route::view('teste', 'template.layout');
 //Route::view('teste', 'template.layout');
 
 
 
 Route::resource('orders', OrderController::class)->middleware('auth');
-Route::get('/generate-pdf', 'PdfController@generate');
-
-
-Route::resource('customers', CustomerController::class)->middleware('auth');
-Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])
-    ->name('customers.foto.destroy')->middleware('auth');
-
 
 
 Route::middleware('can:funcionario')->group(function () {
+
+    Route::get('/home', [TshirtImageController::class, 'index'])->name('home');
+
+    Route::get('/', [TshirtImageController::class, 'index'])->name('root');
+
+    Route::resource('customers', CustomerController::class)->middleware('auth');
+    Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])
+        ->name('customers.foto.destroy')->middleware('auth');
+
     // Route que devolve uma imagem privada
     Route::get('tshirt_images_private/{image}', function ($image) {
         $file = storage_path('app/tshirt_images_private/' . $image);
@@ -71,14 +66,6 @@ Route::middleware('can:funcionario')->group(function () {
 
     Route::resource('tshirt_images', TshirtImageController::class);
 
-    Route::middleware('admin')->group(function () {
-        Route::resource('statistics', StatisticsController::class);
-        Route::resource('users', UserController::class)->middleware('auth');
-        Route::resource('blockers', BlockController::class)->middleware('auth');
-        Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
-            ->name('users.foto.destroy')->middleware('auth');
-    });
-
     // Gestao de categories, colors e prices (so administradores)
     Route::middleware('can:administrate')->group(function () {
         Route::resource('categories', CategoryController::class);
@@ -86,6 +73,11 @@ Route::middleware('can:funcionario')->group(function () {
         Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
         Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
         Route::put('prices', [PriceController::class, 'update'])->name('prices.update');
+        Route::resource('statistics', StatisticsController::class);
+        Route::resource('users', UserController::class)->middleware('auth');
+        Route::resource('blockers', BlockController::class)->middleware('auth');
+        Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
+            ->name('users.foto.destroy')->middleware('auth');
     });
 
     // Cart routes
@@ -100,6 +92,6 @@ Route::middleware('can:funcionario')->group(function () {
         Route::get('cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout'); // clear cart
     });
 
-    Route::get('/download-pdf/{order}', [OrderController::class, 'downloadPDF'])->name('download.pdf');
+    Route::get('/download-pdf/{order}', [OrderController::class, 'downloadPDF'])->name('download.pdf')->middleware('auth');
 });
 
