@@ -52,6 +52,8 @@ Route::view('teste', 'template.layout');
 
 
 Route::resource('orders', OrderController::class)->middleware('auth');
+Route::get('/generate-pdf', 'PdfController@generate');
+
 
 Route::resource('customers', CustomerController::class)->middleware('auth');
 Route::delete('customers/{customer}/foto', [CustomerController::class, 'destroy_foto'])

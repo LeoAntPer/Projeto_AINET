@@ -49,19 +49,39 @@
 <div class="mb-3 form-floating">
     <input type="text" name="customer_id" id="inputCustomer" {{ $disabledStr }} value="{{$order->customer_id}}" class="form-control">
     <label for="inputCustomer" class="form-label">Customer</label>
+    @error('customer_id')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
 </div>
 @endif
 <div class="mb-3 form-floating">
     <input type="text" name="date" id="inputDate" {{ $disabledStr }} value="{{$order->date}}" class="form-control">
     <label for="inputDate" class="form-label">Date</label>
+    @error('date')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
 </div>
 <div class="mb-3 form-floating">
     <input type="text" name="total_price" id="inputTotalPrice" {{ $disabledStr }} value="{{$order->total_price}}" class="form-control">
     <label for="inputTotalPrice" class="form-label">Total price</label>
+    @error('total_price')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
 </div>
 <div class="mb-3 form-floating">
-    <input type="text" name="notes" id="inputNotes" {{ $disabledStr }} value="{{$order->notes}}" class="form-control">
+    <input type="text" name="notes" id="inputNotes" {{ $disabledStr }} value="{{ old('notes', $order->notes) }}" class="form-control @error('notes') is-invalid @enderror">
     <label for="inputNotes" class="form-label">Notes</label>
+    @error('notes')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
 </div>
 <div class="mb-3 form-floating">
     <input type="text" name="address" id="inputAddress" {{ $disabledStr }} value="{{ old('address', $order->address) }}" class="form-control @error('address') is-invalid @enderror">
@@ -97,8 +117,9 @@
 <div class="mb-3 form-floating">
     <input type="text" name="payment_ref" id="inputPaymentRef" {{ $disabledStr }} value="{{$order->payment_ref}}" class="form-control">
     <label for="inputPaymentRef" class="form-label">Payment ref</label>
-</div>
-<div class="mb-3 form-floating">
-    <input type="text" name="receipt_url" id="inputReceipt" {{ $disabledStr }} value="{{$order->receipt_url}}" class="form-control">
-    <label for="inputReceipt" class="form-label">Receipt URL</label>
+    @error('payment_ref')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
 </div>

@@ -23,17 +23,19 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'customer_id',
+            'customer_id' => [
+                'sometimes',
                 Rule::exists('users', 'id'),
             ],
             'status' => 'required|in:pending,paid,closed,canceled',
+
             'nif' => 'required|string|digits:9',
             'date' => 'required|date',
-            'total_price' => 'required,numeric,regex:/^\d+(\.\d{1,2})?$/',
-            'notes' => 'optional|string',
+            'total_price' => 'sometimes|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'notes' => 'nullable|string|',
             'address' => 'required|string',
             'payment_type' => 'required|in:VISA,MC,PAYPAL',
+            'payment_ref' => 'sometimes|string',
         ];
     }
 }

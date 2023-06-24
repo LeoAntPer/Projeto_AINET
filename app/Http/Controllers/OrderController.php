@@ -8,19 +8,23 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Str;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\View\Factory;
 
 class OrderController extends Controller
 {
     public function index(Request $request): View
     {
         $orderQuery = Order::query();
-        if(Auth::user()->user_type == 'C')
-        {
+        if (Auth::user()->user_type == 'C') {
             $orderQuery->where('customer_id', Auth::user()->id);
         }
-        if(Auth::user()->user_type == 'E')
-        {
+        if (Auth::user()->user_type == 'E') {
             $orderQuery = Order::query()->whereIn('status', ['pending', 'paid']);
         }
         $filterByStatus = $request->status ?? '';
@@ -63,8 +67,31 @@ class OrderController extends Controller
     {
         return view('orders.edit')->withOrder($order);
     }
+
     public function update(OrderRequest $request, Order $order): RedirectResponse
     {
+        if ($order->status == 'closed') {
+            $pdf = new PDF(
+                $options = new Dompdf(),
+                $domPdfOptions = app(Repository::class),
+                $app = app(Filesystem::class),
+                $config = app(Factory::class)
+            );
+            // Generate your HTML content here
+            $html = view('orders.pdf')->withOrder($order);
+            // Generate a random filename
+            $randomFilename = Str::random(10) . '.pdf';
+            // Specify the directory path for the generated PDF
+            $outputDirectory = storage_path('app/pdf_receipts');
+            // Combine the directory path and random filename
+            $outputFilePath = $outputDirectory . '/' . $randomFilename;
+            // Load HTML content into the PDF instance
+            $pdf->loadHTML($html);
+            // Save the PDF to the specified file path
+            $pdf->save($outputFilePath);
+            // Store the path in a variable
+            $order->receipt_url = $randomFilename;
+        }
         $order->update($request->validated());
         $url = route('orders.show', ['order' => $order]);
         $htmlMessage = "Order <a href='$url'>#{$order->id}</a>
@@ -98,5 +125,6 @@ class OrderController extends Controller
     {
         return view('orders.show')->withOrder($order);
     }
+
 }
 
