@@ -29,12 +29,12 @@ class OrderRequest extends FormRequest
             ],
             'status' => 'required|in:pending,paid,closed,canceled',
 
-            'nif' => 'required|string|digits:9',
-            'date' => 'required|date',
+            'nif' => 'sometimes|string|digits:9',
+            'date' => 'sometimes|date',
             'total_price' => 'sometimes|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'notes' => 'nullable|string|',
-            'address' => 'required|string',
-            'payment_type' => 'required|in:VISA,MC,PAYPAL',
+            'notes' => 'sometimes|string|',
+            'address' => 'sometimes|string',
+            'payment_type' => 'sometimes|in:VISA,MC,PAYPAL',
             'payment_ref' => 'sometimes|string',
         ];
     }

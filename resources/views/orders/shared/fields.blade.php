@@ -45,6 +45,9 @@
         @enderror
     </div>
 @endif
+@php
+    $disabledStr = 'disabled';
+@endphp
 @if ((Auth::user()->user_type ?? '') == 'A' or (Auth::user()->user_type ?? '') == 'E')
 <div class="mb-3 form-floating">
     <input type="text" name="customer_id" id="inputCustomer" {{ $disabledStr }} value="{{$order->customer_id}}" class="form-control">
