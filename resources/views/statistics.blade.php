@@ -1,5 +1,5 @@
 @extends('template.layout')
-@section('titulo', 'Imagine Shirt')
+@section('titulo', 'Statistics')
 
 @section('subtitulo')
     <ol class="breadcrumb">
