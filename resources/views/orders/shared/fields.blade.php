@@ -123,3 +123,10 @@
     </div>
     @enderror
 </div>
+@if ((Auth::user()->user_type ?? '') == 'A' or (Auth::user()->user_type ?? '') == 'C')
+    @if ($order->receipt_url)
+        <div class="mb-3 form-floating">
+            <a href="{{ route('download.pdf', ['order' => $order]) }}" class="btn btn-secondary ms-3">Download Receipt PDF</a>
+        </div>
+    @endif
+@endif

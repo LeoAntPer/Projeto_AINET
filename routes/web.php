@@ -97,5 +97,7 @@ Route::middleware('can:funcionario')->group(function () {
         Route::post('cart', [CartController::class, 'store'])->name('cart.store'); // confirm order
         Route::get('cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout'); // clear cart
     });
+
+    Route::get('/download-pdf/{order}', [OrderController::class, 'downloadPDF'])->name('download.pdf');
 });
 

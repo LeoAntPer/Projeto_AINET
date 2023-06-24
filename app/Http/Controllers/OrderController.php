@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Response;
 use Dompdf\Options;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Str;
@@ -126,5 +127,13 @@ class OrderController extends Controller
         return view('orders.show')->withOrder($order);
     }
 
+    public function downloadPDF(Order $order)
+    {
+        $outputDirectory = storage_path('app/pdf_receipts');
+        // Replace 'path/to/pdf/file.pdf' with the actual path to your PDF file
+        $pdfFilePath = $outputDirectory . '/' . $order->receipt_url;
+
+        return Response::download($pdfFilePath);
+    }
 }
 
