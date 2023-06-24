@@ -17,7 +17,6 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\View\Factory;
 use App\Notifications\OrderClosed;
 use App\Notifications\OrderCanceled;
-use App\Notifications\OrderPending;
 use App\Models\User;
 
 
@@ -61,8 +60,6 @@ class OrderController extends Controller
     {
         $newOrder = Order::create($request->validated());
         $url = route('orders.show', ['order' => $newOrder]);
-        $user = User::find($newOrder->customer_id);
-        $user->notify(new OrderPending($newOrder));
         $htmlMessage = "Order <a href='$url'>#{$newOrder->id}</a>
             <strong>\"{$newOrder->nome}\"</strong> foi criada com sucesso!";
         return redirect('/orders')

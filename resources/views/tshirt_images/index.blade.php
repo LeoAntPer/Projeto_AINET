@@ -66,7 +66,7 @@
     @endif
     <h1>Public Images</h1>
 <div class="d-flex flex-row justify-content-start flex-wrap gap-3">
-    @if($user != null and $user->user_type == 'A')
+    @if($user != null and $user->user_type != 'E')
     <div class="card">
         <a href="#"><img class="card-img-top img-fluid" src="/img/addImage.png" style="width: 200px; height: 200px; align-content: center" alt="Adicionar Imagem"></a>
         <div class="d-flex flex-column align-items-center p-1">

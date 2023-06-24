@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Price;
+use App\Models\User;
+use App\Notifications\OrderPending;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -205,6 +207,8 @@ class CartController extends Controller
                 }
                 return $newOrder;
             });
+            $user = User::find($order->customer_id);
+            $user->notify(new OrderPending($order));
             $htmlMessage = "Order created successfully. <a href=".route('orders.show', ['order' => $order->id]).">See order details</a>";
             $alertType = 'success';
             // clear ao cart
@@ -215,7 +219,7 @@ class CartController extends Controller
             $htmlMessage = 'Failed to complete order';
             $alertType = 'danger';
         }
-        return back()
+        return redirect('/home')
             ->with('alert-msg', $htmlMessage)
             ->with('alert-type', $alertType);
     }
