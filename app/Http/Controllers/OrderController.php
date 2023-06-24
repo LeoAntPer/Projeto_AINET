@@ -72,11 +72,13 @@ class OrderController extends Controller
 
     public function edit(Order $order): View
     {
+        $this->authorize('cienteNao');
         return view('orders.edit')->withOrder($order);
     }
 
     public function update(OrderRequest $request, Order $order): RedirectResponse
     {
+        $this->authorize('cienteNao');
         if ($order->status == 'closed') {
             $pdf = new PDF(
                 $options = new Dompdf(),
@@ -117,6 +119,7 @@ class OrderController extends Controller
 
     public function destroy(Order $order): RedirectResponse
     {
+        $this->authorize('cienteNao');
         try {
             $order->delete();
             $htmlMessage = "Order #{$order->id}
