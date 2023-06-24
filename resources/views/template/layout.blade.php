@@ -99,6 +99,10 @@
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                             Users
                         </a>
+                        <a class="nav-link" href="{{route('statistics.index')}}">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                            Users
+                        </a>
                     @endif
                     <a class="nav-link" href="{{route('cart.show')}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>

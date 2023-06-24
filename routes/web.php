@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\StatisticsController;
 
 //Route::get('prices', [PriceController::class, 'show'])->name('prices.show');
 //Route::get('prices/edit', [PriceController::class, 'edit'])->name('prices.edit');
@@ -71,6 +72,7 @@ Route::middleware('can:funcionario')->group(function () {
     Route::resource('tshirt_images', TshirtImageController::class);
 
     Route::middleware('admin')->group(function () {
+        Route::resource('statistics', StatisticsController::class);
         Route::resource('users', UserController::class)->middleware('auth');
         Route::resource('blockers', BlockController::class)->middleware('auth');
         Route::delete('users/{user}/foto', [UserController::class, 'destroy_foto'])
