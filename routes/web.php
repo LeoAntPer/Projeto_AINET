@@ -69,6 +69,7 @@ Route::middleware('can:funcionario')->group(function () {
 
     Route::resource('tshirt_images', TshirtImageController::class);
     Route::delete('tshirt_images/{id}', 'TshirtImageController@destroy');
+    Route::post('tshirt_images/{id}', 'TshirtImageController@update');
 
     // Gestao de categories, colors e prices (so administradores)
     Route::middleware('can:administrate')->group(function () {
